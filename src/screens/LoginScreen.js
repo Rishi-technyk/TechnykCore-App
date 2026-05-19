@@ -15,7 +15,7 @@ import { Toast } from 'react-native-toast-notifications';
 import { javascriptPost } from '../util/api';
 import { ENDPOINT } from '../util/constant';
 import { useAppTheme } from '../theme/AppThemeProvider';
-
+import { API_BASE_URL } from '@env';
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -49,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
       
       },
     };
-    console.log(apiRequestObject)
+    console.log(API_BASE_URL)
     const response = await javascriptPost(apiRequestObject);
   console.log(response);
       if (response.status) {
@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
     <AuthScreenLayout title={'Sign in'} forgotPasswordText={true}>
       <TextInput
         ref={userRef}
-        placeholder="MemberID (AA-01)"
+        placeholder="MemberID (A-0000)"
         value={email}
         onChangeText={setEmail}
         style={[Loginstyles.input, styles.input]}
@@ -91,7 +91,7 @@ const LoginScreen = ({ navigation }) => {
 
       <TextInput
         ref={passRef}
-        placeholder="Password(DOB:DDMMYYYY)"
+        placeholder="Password"
         value={password}
         onChangeText={setPassword}
         style={[Loginstyles.input, styles.input]}

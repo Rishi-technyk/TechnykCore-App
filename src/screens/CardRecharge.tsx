@@ -321,7 +321,7 @@ console.log( resolvedMode, '---------------------- resolvedMode ----------------
         </View>
 
         <View style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>Analytical Highlights</Text>
+          <Text style={styles.sectionTitle}>Highlights</Text>
           <Text style={styles.infoLine}>
             Largest recharge: <Text style={styles.infoStrong}>{currency(highlights.largest_recharge)}</Text>
           </Text>

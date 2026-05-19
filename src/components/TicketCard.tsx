@@ -37,6 +37,9 @@ const TicketCard: React.FC<Props> = ({ data, quantity, onChange }) => {
         end={{ x: 1, y: 1 }}
         style={styles.hero}
       >
+               <View style={{ padding: 22, overflow: 'hidden' }}>
+
+       
         <View style={styles.heroHeader}>
           <View style={{ flex: 1 }}>
             <Text style={styles.title}>{data?.title}</Text>
@@ -70,6 +73,7 @@ const TicketCard: React.FC<Props> = ({ data, quantity, onChange }) => {
             </Text>
           </View>
         </View>
+         </View>
       </LinearGradient>
 
       <View style={styles.body}>
@@ -118,7 +122,7 @@ const createStyles = (colors: {
       borderWidth: 1,
     },
     hero: {
-      padding: 18,
+      // padding: 18,
     },
     heroHeader: {
       flexDirection: 'row',

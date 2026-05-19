@@ -133,11 +133,11 @@ const TeeBookingDetail = ({ navigation, route }: any) => {
 
   const canEditPlayers =
     data &&
-    Number(data.is_cancelled) === 0 &&
+    Number(data.is_cancelled) == 0 &&
     Number(data.created_by) === Number(userData?.user?.id) &&
     moment(`${data.booking_date} ${data.tee_time}`).isAfter(moment());
-  const tone = resolveTone(data?.summary?.status || (Number(data?.is_cancelled) === 1 ? 'Cancelled' : 'Active'));
-
+  const tone = resolveTone(data?.summary?.status || (Number(data?.is_cancelled) == 1 ? 'Cancelled' : 'Active'));
+console.log( canEditPlayers, '---------------------- canEditPlayers ---------------------');
   if (isLoading) {
     return (
       <View style={{ flex: 1, backgroundColor: colors.background }}>
@@ -169,7 +169,8 @@ const TeeBookingDetail = ({ navigation, route }: any) => {
       >
         <BookingHeroCard
           eyebrow="Golf Reservation"
-          title={`Tee ${data.summary?.tee_time || data.tee_time}`}
+          // title={`Tee ${data.summary?.tee_time || data.tee_time}`}
+                    title={`Tee ${data.summary?.tee_time || data.tee_time}`}
           subtitle={`${data.summary?.booking_date || moment(data.booking_date).format('DD MMM YYYY')} • Hole ${data.summary?.hole_number || data.hole_number}`}
           status={data.summary?.status || (Number(data.is_cancelled) === 1 ? 'Cancelled' : 'Active')}
           statusTone={tone.color === colors.danger ? 'danger' : 'success'}
@@ -223,7 +224,7 @@ const TeeBookingDetail = ({ navigation, route }: any) => {
 
           {canEditPlayers ? (
             <TouchableOpacity
-              style={[styles.editButton, { borderColor: colors.primary, backgroundColor: `${colors.primary}12` }]}
+              style={[styles.editButton, { borderColor: colors.text, backgroundColor: `${colors.text}12` }]}
               onPress={() =>
                 navigation.navigate('TeeBuddies', {
                   data,
@@ -234,8 +235,8 @@ const TeeBookingDetail = ({ navigation, route }: any) => {
                 })
               }
             >
-              <Icon name="account-edit-outline" size={18} color={colors.primary} />
-              <Text style={[styles.editText, { color: colors.primary }]}>Edit Players</Text>
+              <Icon name="account-edit-outline" size={18} color={colors.text} />
+              <Text style={[styles.editText, { color: colors.text }]}>Edit Players</Text>
             </TouchableOpacity>
           ) : null}
         </DetailSection>

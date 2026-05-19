@@ -240,14 +240,16 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
           />
         }
       >
-        <LinearGradient
-             colors={resolvedMode === 'dark'
-  ? ['#020617', '#0F172A', '#1E293B']
-  : ['#1E293B', '#334155', '#475569']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-               style={styles.heroCard}
-      >
+        <View
+                   // colors={[colors.primary, colors.overlay]}
+         //           colors={resolvedMode === 'dark'
+         // ? ['#020617', '#0F172A', '#1E293B']
+         // : ['#1E293B', '#334155', '#475569']}
+         //           start={{ x: 0, y: 0 }}
+         //           end={{ x: 1, y: 1 }}
+                   
+                   style={styles.heroCard}
+                 >
           <View style={styles.heroTop}>
             <View>
               <Text style={styles.eyebrow}>Current Outstanding</Text>
@@ -283,7 +285,7 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
               <Text style={styles.heroAmount}>{currency(summary.bill_amount)}</Text>
             </View>
           </View>
-        </LinearGradient>
+        </View>
 
         <View style={styles.analyticsRow}>
           <View style={styles.metricCard}>
@@ -324,7 +326,7 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
         </View>
 
         <View style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>Analytical Highlights</Text>
+          <Text style={styles.sectionTitle}>Highlights</Text>
           <Text style={styles.infoLine}>
             Largest credit: <Text style={styles.infoStrong}>{currency(highlights.largest_credit)}</Text>
           </Text>
@@ -351,7 +353,7 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
 
         {trend.length ? (
           <View style={styles.sectionCard}>
-            <Text style={styles.sectionTitle}>Monthly Trend</Text>
+            <Text style={styles.sectionTitle}>Monthly Transactions</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={true}>
               {trend.map(renderTrendItem)}
             </ScrollView>
@@ -361,7 +363,7 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
         <View style={styles.sectionCard}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Transaction History</Text>
-            <Text style={styles.sectionMeta}>{cards.activity_count || transactions.length} items</Text>
+            <Text style={styles.sectionMeta}>{cards.activity_count || transactions.length} transactions</Text>
           </View>
 
           {activeFilterChips.length ? (

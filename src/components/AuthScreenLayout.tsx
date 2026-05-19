@@ -42,7 +42,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
   const isCompact = width < 380;
   const Version = DeviceInfo.getVersion();
   const styles = createStyles(colors);
-
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: colors.primary }}
@@ -248,7 +247,7 @@ const createStyles = (colors: {
     alignItems: 'center',
   },
   backToSignInText: {
-    color: colors.primary,
+    color: colors.placeholder,
     fontSize: 14,
     paddingVertical: 20,
     fontFamily: FONT_FAMILY.normal,

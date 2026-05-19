@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
+// import InAppBrowser from 'react-native-inappbrowser-reborn';
 // import { initializeEasebuzzCheckout } from 'react-native-easebuzz-sdk';
 import Animated, {
   useAnimatedStyle,

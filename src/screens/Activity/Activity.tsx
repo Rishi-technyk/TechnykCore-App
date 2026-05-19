@@ -389,7 +389,7 @@ const Activity: React.FC<Props> = ({ route, navigation }) => {
                             ? colors.warning
                             : time?.session_id === 2
                             ? colors.danger
-                            : colors.primary
+                            : colors.text
                         }
                         size={18}
                       />

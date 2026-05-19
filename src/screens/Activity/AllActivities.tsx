@@ -103,7 +103,8 @@ const AllActivities: React.FC<Props> = ({ navigation }) => {
     </View>
   );
 
-  const renderFacility = ({ item }: { item: any }) => (
+  const renderFacility = ({ item }: { item: any }) => {
+    return(
     <Pressable
       onPress={() => handleFacility(item)}
       style={[
@@ -144,7 +145,7 @@ const AllActivities: React.FC<Props> = ({ navigation }) => {
         </Text>
       </View>
     </Pressable>
-  );
+  )};
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>

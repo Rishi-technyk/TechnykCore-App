@@ -54,8 +54,9 @@ export const ENV: EnvConfig = {
 
 export const DOMAIN = {
   APP_NAME:APP_NAME,
-  BASE: API_BASE_URL,
-// BASE: "http://10.0.2.2:8000/api/",
+  // BASE: API_BASE_URL,
+  BASE: "http://10.0.2.2:8000/api/",
+// BASE: "https://cgomanoida.org/member/api/v2/",
   LOCAL:API_LOCAL_URL,
   API_IMAGE_URL:API_IMAGE_URL,
   PAY_DOMAIN: "https://dsoi.org.in/membersection/mobileAPI/",
@@ -145,6 +146,7 @@ export const ENDPOINT = {
   tee_settings:'member/get/tee/setting',
   tee_sessions:'member/get/sessions',
   tee_srarch_buddies:'member/get/buddies/',
+    tee_delete_group:'member/delete/tee/group/',
   tee_add_group:'member/create/tee/group',
   tee_edit_group:'member/update/tee/group/',
   tee_group:'member/get/tee/group',

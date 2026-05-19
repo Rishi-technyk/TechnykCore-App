@@ -96,6 +96,7 @@ const PickPlayers: React.FC<any> = ({
   const availablePlayers = Array.isArray(guestQuery?.data?.data?.data)
     ? guestQuery.data.data.data
     : [];
+    console.log( availablePlayers, '---------------------- availablePlayers ---------------------');
   const playerLibrary = useMemo(() => {
     const libraryResponse = playerLibraryQuery?.data || {};
     const savedPlayers = Array.isArray(libraryResponse?.data) ? libraryResponse.data : [];
@@ -359,7 +360,7 @@ const PickPlayers: React.FC<any> = ({
         : Number(item.occupant_id) === 2
         ? 'Guest'
         : 'Saved';
-
+console.log( item, '---------------------- item ---------------------');
     return (
       <Pressable
         key={`${item.source}-${playerKey(item)}`}
@@ -378,7 +379,8 @@ const PickPlayers: React.FC<any> = ({
               {item.DisplayName}
             </Text>
             <Text style={[styles.memberMeta, { color: colors.textMuted }]}>
-              {Number(item.occupant_id) === 2
+              {
+              Number(item.occupant_id) === 2
                 ? 'Guest player'
                 : item.MemberID || 'Member player'}
             </Text>
@@ -404,13 +406,10 @@ const PickPlayers: React.FC<any> = ({
   };
 
   const renderMembers = ({ item }: { item: Player }) => {
-    if (selectedKeys.has(playerKey(item))) {
-      return null;
-    }
-
+  
     return (
       <Pressable
-        onPress={() => handlePlayerSelect(item)}
+        // onPress={() => handlePlayerSelect(item)}
         style={[
           styles.memberCard,
           {
@@ -428,7 +427,7 @@ const PickPlayers: React.FC<any> = ({
           </Text>
         </View>
         <View style={styles.memberPriceWrap}>
-          <Text style={[styles.memberPrice, { color: colors.primary }]}>
+          <Text style={[styles.memberPrice, { color: colors.placeholder }]}>
             Rs. {Number(item?.charge || 0).toFixed(0)}
           </Text>
           <Icon name="plus" size={18} color={colors.primary} />

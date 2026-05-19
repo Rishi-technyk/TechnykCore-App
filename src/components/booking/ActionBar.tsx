@@ -42,11 +42,13 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent:'space-between',
+    alignItems:'center',
     marginHorizontal: 16,
     marginBottom: 14,
   },
   button: {
-    minWidth: '48%',
+    minWidth: '42%',
     borderWidth: 1,
     borderRadius: 16,
     paddingVertical: 12,

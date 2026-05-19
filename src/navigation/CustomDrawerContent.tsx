@@ -162,8 +162,8 @@ const handleNavigation = (item:any) => {
             <Switch
               value={resolvedMode === "dark"}
               onValueChange={toggleMode}
-              thumbColor={resolvedMode === "dark" ? colors.secondary : colors.surface}
-              trackColor={{ false: colors.border, true: colors.secondary }}
+              // thumbColor={resolvedMode === "dark" ? colors.secondary : colors.surface}
+              // trackColor={{ false: colors.border, true: colors.secondary }}
             />
           </View>
 

@@ -48,7 +48,6 @@ const Tee: React.FC<Props> = ({ navigation }) => {
 
   const teeQuery = useTee(userData, tempStartDate, session);
   const data: any = teeQuery.data;
-
   const normalizedData = useMemo(() => {
     if (!data) {
       return {
@@ -138,7 +137,7 @@ const Tee: React.FC<Props> = ({ navigation }) => {
         ? moment(item.locked_till, 'YYYY-MM-DD HH:mm:ss').toDate()
         : null;
 
-      if (item?.is_locked_by_admin === 1) {
+      if (item?.is_locked_by_admin == 1) {
         return {
           label: 'Reserved',
           tone: 'danger',
@@ -147,7 +146,7 @@ const Tee: React.FC<Props> = ({ navigation }) => {
         };
       }
 
-      if (item?.is_booked === 1) {
+      if (item?.is_booked == 1) {
         return {
           label: 'Booked',
           tone: 'warning',
@@ -160,8 +159,8 @@ const Tee: React.FC<Props> = ({ navigation }) => {
         return {
           label: 'Under process',
           tone: 'warning',
-          color: colors.primary,
-          backgroundColor: `${colors.primary}14`,
+          color: colors.text,
+          backgroundColor: `${colors.text}14`,
         };
       }
 
@@ -188,13 +187,16 @@ const Tee: React.FC<Props> = ({ navigation }) => {
     let sheets = normalizedData?.tee_sheets || [];
 
     if (isSwitchEnabled) {
-      sheets = sheets.filter((item: any) => item.is_active === 1 && item.is_booked !== 1);
+      sheets = sheets.filter((item: any) =>
+       {
+        return  item.is_active == 1 && item.is_booked != 1}
+    );
     }
-
     if (hole?.id) {
       sheets = sheets.filter((item: any) => item.hole_number === hole.hole_number);
     }
 
+  
     return sheets;
   }, [hole?.hole_number, hole?.id, isSwitchEnabled, normalizedData?.tee_sheets]);
 
@@ -207,13 +209,12 @@ const Tee: React.FC<Props> = ({ navigation }) => {
         if (status === 'Available') acc.available += 1;
         if (status === 'Booked') acc.booked += 1;
         if (status === 'Reserved') acc.adminReserved += 1;
-        if (status === 'Under process') acc.processing += 1;
+        if (status === 'Under process') acc.locked_by_user += 1;
         return acc;
       },
-      { available: 0, booked: 0, adminReserved: 0, processing: 0 },
+      { available: 0, booked: 0, adminReserved: 0, locked_by_user: 0 },
     );
   }, [getStatusInfo, normalizedData?.tee_sheets]);
-
   const handleToBeReserved = useCallback(
     async (item: any) => {
       const response = await javascriptPost({
@@ -278,7 +279,7 @@ const Tee: React.FC<Props> = ({ navigation }) => {
       >
         <View style={styles.slotHeader}>
           <View style={styles.slotIconWrap}>
-            <Icon name="golf" size={20} color={colors.primary} />
+            <Icon name="golf" size={20} color={colors.placeholder} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={[styles.slotTime, { color: colors.text }]}>
@@ -331,7 +332,6 @@ const Tee: React.FC<Props> = ({ navigation }) => {
       </Pressable>
     );
   };
-
   const listHeader = (
     <View>
       <BookingHeroCard
@@ -381,10 +381,10 @@ const Tee: React.FC<Props> = ({ navigation }) => {
               placeholderStyle={{ color: colors.textMuted, fontFamily: FONT_FAMILY.normal }}
               selectedTextStyle={{ color: colors.text, fontFamily: FONT_FAMILY.semiBold }}
               containerStyle={{
-                backgroundColor: colors.surface,
+                // backgroundColor: colors.surface,
                 borderRadius: 18,
                 borderWidth: 1,
-                borderColor: colors.border,
+                // borderColor: colors.border,
               }}
               itemTextStyle={{ color: colors.primary, fontFamily: FONT_FAMILY.normal }}
               data={[{ id: 0, session_name: 'All Sessions' }, ...(normalizedData?.sessions || [])]}
@@ -407,7 +407,7 @@ const Tee: React.FC<Props> = ({ navigation }) => {
               placeholderStyle={{ color: colors.textMuted, fontFamily: FONT_FAMILY.normal }}
               selectedTextStyle={{ color: colors.text, fontFamily: FONT_FAMILY.semiBold }}
               containerStyle={{
-                backgroundColor: colors.surface,
+                // backgroundColor: colors.surface,
                 borderRadius: 18,
                 borderWidth: 1,
                 borderColor: colors.border,
@@ -484,7 +484,7 @@ const Tee: React.FC<Props> = ({ navigation }) => {
           <RefreshControl
             refreshing={Boolean(teeQuery.isRefetching)}
             onRefresh={teeQuery.refetch}
-            tintColor={colors.primary}
+            tintColor={colors.text}
           />
         }
       />
@@ -581,7 +581,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(21, 24, 49, 0.08)',
+    backgroundColor: 'rgba(130, 131, 139, 0.08)',
   },
   slotTime: {
     fontSize: 17,

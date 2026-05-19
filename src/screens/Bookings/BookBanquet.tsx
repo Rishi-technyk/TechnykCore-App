@@ -894,7 +894,7 @@ setCharge(totalAmount)
                     {venue?.GSTper && (
                       <Text
                         style={{
-                          color: 'black',
+                          color: colors.placeholder,
                           fontFamily: FONT_FAMILY.normal,
                         }}>
                         GST({venue.GSTper}%):{' '}
@@ -903,12 +903,12 @@ setCharge(totalAmount)
                     )}
                     {venue.rate && <Text
                       style={{
-                        color: 'grey',
+                        color:colors.placeholder,
                         fontFamily: FONT_FAMILY.normal,
                       }}>
                       Amount: <Text
                       style={{
-                        color: 'black',
+                        color: colors.text,
                         fontFamily: FONT_FAMILY.semiBold,
                       }}>₹{(parseFloat(venue?.rate)?.toFixed(2))}</Text>
                     </Text>}
@@ -923,12 +923,12 @@ setCharge(totalAmount)
                     {venue?.capacity && (
                         <Text
                         style={{
-                            color: 'grey',
+                            color: colors.placeholder,
                             fontFamily: FONT_FAMILY.normal,
                         }}>
                         Capacity: <Text
                       style={{
-                        color: 'black',
+                        color: colors.text,
                         fontFamily: FONT_FAMILY.semiBold,
                       }}>{venue.capacity}</Text>
                       </Text>
@@ -936,7 +936,7 @@ setCharge(totalAmount)
                     {parseFloat(venue?.security_deposit||0) >0 && (
                   <Text
                     style={{
-                      color: 'grey',
+                      color: colors.placeholder,
                       fontFamily: FONT_FAMILY.normal,
                     }}>
                   Security deposit:{' '}
@@ -952,7 +952,7 @@ setCharge(totalAmount)
                     {venue?.rate && (
                   <Text
                     style={{
-                      color: 'black',
+                      color: colors.placeholder,
                       fontFamily: FONT_FAMILY.normal,
                       textAlign:'right'
                     }}>
@@ -1127,7 +1127,7 @@ setCharge(totalAmount)
                   <Text style={styles.selectedTextStyle}>
                     {venueList.length} Venue
                   </Text>
-                  <Icons name="caret-up-outline" size={20} color="black" />
+                  <Icons name="caret-up-outline" size={20} color={colors.text} />
                 </View>
               </Pressable>
 

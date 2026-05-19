@@ -10,7 +10,8 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-
+import 
+{ APP_NAME } from '@env';
 import { useAppTheme } from '../theme/AppThemeProvider';
 import { FONT_FAMILY } from '../util/colors';
 
@@ -101,7 +102,7 @@ const SplashOverlay: React.FC<Props> = ({ visible, onFinish }) => {
             />
           </View>
 
-          <Text style={styles.title}>Technyk Club</Text>
+          <Text style={styles.title}>{APP_NAME} Club</Text>
           <Text style={styles.subtitle}>Experience the future of club management</Text>
 
           <View style={styles.loaderRow}>

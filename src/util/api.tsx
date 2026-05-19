@@ -27,7 +27,7 @@ export function javascriptPost<T = any>(
   apiRequestObject: ApiRequestObject
 ): Promise<ApiResponse<T>> {
   const path = `${DOMAIN.BASE}${apiRequestObject.path}`;
-  console.log(path, "---------------path---------------");
+  console.log(DOMAIN.BASE, "---------------path---------------");
   console.log(path, "---------", apiRequestObject);
 
   const token = apiRequestObject.Token ?? "";

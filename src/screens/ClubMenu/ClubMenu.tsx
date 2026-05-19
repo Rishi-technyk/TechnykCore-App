@@ -21,7 +21,7 @@ import EmptyStateCard from '../../components/booking/EmptyStateCard';
 import AppAlertModal from '../../components/feedback/AppAlertModal';
 import { useAppAlert } from '../../hooks/useAppAlert';
 import { javascriptGet } from '../../util/api';
-import { ENDPOINT } from '../../util/constant';
+import { DOMAIN, ENDPOINT } from '../../util/constant';
 import { AppStackParamList } from '../../navigation/AppDrawer';
 import { RootState } from '../../store/store';
 import { FONT_FAMILY } from '../../util/colors';
@@ -129,12 +129,7 @@ const ClubMenu: React.FC<Props> = ({ navigation }) => {
 
   const renderMenuCard = ({ item, index }: { item: MenuItem; index: number }) => {
     const subtitle = item.subtitle || item.subTitle || item.description || 'Tap to open this club menu.';
-    const iconSource = item.icon_url
-      ? { uri: item.icon_url }
-      : item.icon
-      ? { uri: `https://club26.org/mobileAPI/icons/${item.icon}` }
-      : null;
-
+    const iconSource = { uri: `${DOMAIN.IMG}icons/${item.icon}` || item.icon_url };
     return (
       <Pressable
         onPress={() => handleOpenMenu(item)}
@@ -216,18 +211,7 @@ const ClubMenu: React.FC<Props> = ({ navigation }) => {
               title="Club Menu Hub"
               subtitle="Browse menus, jump into venue pages, and keep the food discovery flow cleaner and faster."
               status={`${meta.total_menus || menus.length} menus`}
-              statusTone="neutral"
-              meta={[
-                {
-                  label: 'With Icons',
-                  value: String(meta.menus_with_icons || 0),
-                },
-                {
-                  label: 'Ready',
-                  value: String(menus.length),
-                  tone: 'success',
-                },
-              ]}
+              statusTone="success"
             />
 
             <View style={styles.searchWrap}>

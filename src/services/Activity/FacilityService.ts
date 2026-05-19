@@ -144,6 +144,7 @@ const fetchActivitySessions = async (id, session_id, token) => {
     return response;
   } catch (error) {}
 };
+
 const fetchPlayers = async (memberId, token,Active,NonMember,Member) => {
   try {
     const apiRequestObject = {
@@ -158,6 +159,7 @@ const fetchPlayers = async (memberId, token,Active,NonMember,Member) => {
     console.log('\x1b[36m%s\x1b[0m', apiRequestObject, '---------------------- apiRequestObject ---------------------');
     
     const response = await api.javascriptPost(apiRequestObject);
+     console.log( response, '---------------------- apiRequestObject ---------------------');
      return response;
   } catch (error) {
     console.log('\x1b[36m%s\x1b[0m', error, '---------------------- error ---------------------');

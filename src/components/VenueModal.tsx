@@ -9,6 +9,7 @@ import React from 'react';
 import RNModal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FONT_FAMILY, LIGHT_BLUE, SECONDARY_COLOR } from '../util/colors';
+import UniversalModal from './UniversalModal';
 interface VenueModalProps {
   visible: boolean;
   onDismiss: () => void;
@@ -18,32 +19,15 @@ interface VenueModalProps {
 
 const VenueModal:React.FC<VenueModalProps> = ({visible, onDismiss, venues, charge}) => {
   return (
-    <RNModal
-      isVisible={visible}
-      collapsable={true}
-      swipeDirection={['down']}
-      coverScreen={false}
-      onDismiss={onDismiss}
-      style={{margin: 0}}
-      onBackdropPress={onDismiss}
-      avoidKeyboard={false}
-      backdropColor="rgba(0, 0, 0, 0.5)">
-      <Pressable
-        onPress={onDismiss}
-        style={{
-          backgroundColor: 'white',
-          alignSelf: 'center',
-          margin: 10,
-          padding: 10,
-          borderRadius: 20,
-        }}>
-        <Icon name="close" size={24} color="red" />
-      </Pressable>
+    <UniversalModal
+      visible={visible}
+     
+      setVisible={onDismiss}
+    
+      isFull={true}
+      title="Venue Details">
+ 
 
-      <View style={styles.modalContent}>
-        <Text style={[styles.name, {margin: 10, textAlign: 'center'}]}>
-          Venues Details
-        </Text>
         <FlatList
           data={venues || []}
           style={{flexGrow: 0}}
@@ -162,8 +146,7 @@ const VenueModal:React.FC<VenueModalProps> = ({visible, onDismiss, venues, charg
             </View>
           )}
         </View>
-      </View>
-    </RNModal>
+    </UniversalModal>
   );
 };
 

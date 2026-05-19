@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -38,7 +38,7 @@ interface RootState {
 const FeedbackScreen: React.FC = () => {
   const userData = useSelector((state: RootState) => state.auth);
   const { colors } = useAppTheme();
-  const styles = createStyles(colors);
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   const [feedbackTypes, setFeedbackTypes] = useState<FeedbackType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -48,13 +48,13 @@ const FeedbackScreen: React.FC = () => {
   const [description, setDescription] = useState<string>("");
 
   const loadFeedbackTypes = useCallback(async () => {
+   
     try {
       const response = await javascriptGet({
         path: "member/feedback/types-with-categories",
         body: {},
         Token: userData?.token,
       });
-
       if (response?.status) {
         setFeedbackTypes(response.data);
         setSelectedType(response.data?.[0]?.id ?? null);
@@ -104,11 +104,21 @@ const FeedbackScreen: React.FC = () => {
     }
   };
 
-  const categoriesForSelectedType: FeedbackCategory[] =
-    selectedType
-      ? feedbackTypes.find(t => t.id === selectedType)?.categories || []
-      : [];
+ const categoriesForSelectedType = useMemo(() => {
+  if (!selectedType) return [];
 
+  return (
+    feedbackTypes.find(t => t.id === selectedType)?.categories || []
+  );
+}, [selectedType, feedbackTypes]);
+const feedbackTypeData = useMemo(
+  () =>
+    feedbackTypes?.map(t => ({
+      label: t.name.toUpperCase(),
+      value: t.id,
+    })),
+  [feedbackTypes]
+);
   return (
     <View style={styles.screen}>
       <Header title="Submit Your Feedback" />
@@ -138,10 +148,7 @@ const FeedbackScreen: React.FC = () => {
               <Dropdown
                 style={styles.dropdown}
                 containerStyle={styles.dropdownMenu}
-                data={feedbackTypes?.map(t => ({
-                  label: t.name.toUpperCase(),
-                  value: t.id,
-                }))}
+                data={feedbackTypeData}
                 labelField="label"
                 valueField="value"
                 placeholder="Select Feedback Type"

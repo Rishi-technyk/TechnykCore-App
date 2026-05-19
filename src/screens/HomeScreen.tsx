@@ -38,6 +38,7 @@ import EventModal from '../services/Events/EventModal';
 import { javascriptGet } from '../util/api';
 import MemberOrderTypeModal from '../components/MemberOrderTypeModal';
 import { useAppTheme } from '../theme/AppThemeProvider';
+import { DOMAIN } from '../util/constant';
 
 type MenuItem = {
   id?: string | number;
@@ -276,17 +277,17 @@ colors.surfaceAlt
       <Text style={styles.bigTitle}>{item.name}</Text>
       <Text style={styles.smallsubTitle}>{item.subTitle}</Text>
       <Image
-        source={{ uri: `https://club26.org/mobileAPI/icons/${item.icon}` }}
+        source={{ uri: `${DOMAIN.IMG}icons/${item.icon}` }}
         style={styles.bigIcon}
       />
     </Pressable>
   );
 
-  const renderSmallCard = (item: MenuItem) => (
+  const renderSmallCard = (item: MenuItem) =>(
     <Pressable style={styles.smallCard} onPress={() => navigateModule(item)}>
       <Text style={styles.smallTitle}>{item.name}</Text>
       <Image
-        source={{ uri: `https://club26.org/mobileAPI/icons/${item.icon}` }}
+        source={{ uri: `${DOMAIN.IMG}icons/${item.icon}` }}
         style={styles.smallIcon}
       />
     </Pressable>
@@ -350,7 +351,7 @@ colors.surfaceAlt
           resizeMode="contain"
           style={styles.quickIcon}
           source={{
-            uri: `https://club26.org/mobileAPI/icons/${item?.icon}`,
+            uri:`${DOMAIN.IMG}icons/${item.icon}`,
           }}
         />
       </View>
@@ -421,12 +422,13 @@ colors.surfaceAlt
       <EventModal eventModal={eventModal} setEventModal={setEventModal} />
       <ScrollView
         showsVerticalScrollIndicator={false}
+      
         // stickyHeaderIndices={[0]}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor={colors.primary}
+            tintColor={colors.text}
           />
         }
         style={styles.scroll}
@@ -481,9 +483,9 @@ colors.surfaceAlt
         <View style={styles.snapshotCard}>
           <View style={styles.snapshotHeaderRow}>
             <View style={{ flex: 1,width:'60%' }}>
-              <Text style={styles.snapshotTitle}>Member financial snapshot</Text>
+              <Text style={styles.snapshotTitle}>Subscription and Dues</Text>
               <Text style={styles.snapshotSubtitle}>
-                Track dues, available limit, and payment readiness from one place.
+                Dues, available limit, and payments.
               </Text>
             </View>
             <View
@@ -528,15 +530,15 @@ colors.surfaceAlt
         </View>
 
         <View style={styles.analyticsSection}>
-          <Text style={styles.sectionTitle}>Analytics overview</Text>
+          <Text style={styles.sectionTitle}>Account overview</Text>
           <Text style={styles.sectionSubtitle}>
-            A sharper look at recent usage, recharge flow, and bill pressure.
+            Recent usage, recharge, and bill.
           </Text>
 
           {homeDashboardQuery.isLoading && !homeDashboardQuery.data?.data ? (
             <View style={styles.loadingCard}>
               <ActivityIndicator color={colors.primary} />
-              <Text style={styles.loadingText}>Loading member analytics...</Text>
+              <Text style={styles.loadingText}>Loading member dashboard...</Text>
             </View>
           ) : null}
 
@@ -612,9 +614,9 @@ colors.surfaceAlt
                         {formatMetricValue(insight)}
                       </Text>
                     </View>
-                    <Text style={styles.insightDescription}>
+                    {/* <Text style={styles.insightDescription}>
                       {insight.description}
-                    </Text>
+                    </Text> */}
                   </View>
                 );
               })}
@@ -624,7 +626,7 @@ colors.surfaceAlt
           {trend.length > 0 ? (
             <View style={styles.trendCard}>
               <View style={styles.sectionHeaderRow}>
-                <Text style={styles.subSectionTitle}>Monthly trend</Text>
+                <Text style={styles.subSectionTitle}>Monthly transactions</Text>
                 <Text style={styles.subSectionMeta}>Last {trend.length} months</Text>
               </View>
               {trend.map((item, index) => (
@@ -638,7 +640,7 @@ colors.surfaceAlt
                   <View>
                     <Text style={styles.trendMonth}>{item.month_label}</Text>
                     <Text style={styles.trendMeta}>
-                      {item.activity_count} financial touchpoints
+                      {item.activity_count} transactions
                     </Text>
                   </View>
 
@@ -655,7 +657,7 @@ colors.surfaceAlt
             </View>
           ) : null}
 
-          {locationBreakdown.length > 0 || paymentModeBreakdown.length > 0 ? (
+          {/* {locationBreakdown.length > 0 || paymentModeBreakdown.length > 0 ? (
             <View style={styles.breakdownCard}>
               <View style={styles.sectionHeaderRow}>
                 <Text style={styles.subSectionTitle}>Pattern breakdown</Text>
@@ -682,13 +684,13 @@ colors.surfaceAlt
                 </View>
               ) : null}
             </View>
-          ) : null}
+          ) : null} */}
 
           {recentActivity.length > 0 ? (
             <View style={styles.activityCard}>
               <View style={styles.sectionHeaderRow}>
                 <Text style={styles.subSectionTitle}>Recent activity</Text>
-                <Text style={styles.subSectionMeta}>Live movement snapshot</Text>
+                {/* <Text style={styles.subSectionMeta}>Live movement snapshot</Text> */}
               </View>
 
               {recentActivity.map((item, index) => {
@@ -770,7 +772,7 @@ const createStyles = (colors: {
       backgroundColor: colors.background,
     },
     scroll: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.primary,
     },
     scrollContent: {
       paddingBottom: 34,
