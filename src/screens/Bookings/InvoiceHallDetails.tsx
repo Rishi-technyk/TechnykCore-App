@@ -59,7 +59,7 @@ const InvoiceHallDetails: React.FC<Props> = ({ route }) => {
         { label: 'Function date', value: data.summary?.function_date },
         { label: 'Attendees', value: data.summary?.attendees },
         { label: 'Status', value: data.summary?.status || data.status },
-        { label: 'Total', value: `Rs. ${Number(data.summary?.total_amount || 0).toFixed(2)}` },
+        { label: 'Total', value: `₹ ${Number(data.summary?.total_amount || 0).toFixed(2)}` },
       ],
     );
 
@@ -214,10 +214,10 @@ const InvoiceHallDetails: React.FC<Props> = ({ route }) => {
 
                 <DetailGrid
                   items={[
-                    { label: 'Charges', value: `Rs. ${Number(item.charges || 0).toFixed(2)}` },
-                    { label: 'GST', value: `Rs. ${Number(item.gst_amount || 0).toFixed(2)}` },
-                    { label: 'Security', value: `Rs. ${Number(item.security_deposit || 0).toFixed(2)}` },
-                    { label: 'Total', value: `Rs. ${Number(item.total || 0).toFixed(2)}`, highlight: true },
+                    { label: 'Charges', value: `₹ ${Number(item.charges || 0).toFixed(2)}` },
+                    { label: 'GST', value: `₹ ${Number(item.gst_amount || 0).toFixed(2)}` },
+                    { label: 'Security', value: `₹ ${Number(item.security_deposit || 0).toFixed(2)}` },
+                    { label: 'Total', value: `₹ ${Number(item.total || 0).toFixed(2)}`, highlight: true },
                   ]}
                 />
 
@@ -225,10 +225,10 @@ const InvoiceHallDetails: React.FC<Props> = ({ route }) => {
                   <View style={[styles.cancelBox, { borderColor: colors.danger, backgroundColor: `${colors.danger}10` }]}>
                     <Text style={[styles.cancelTitle, { color: colors.danger }]}>Cancellation Summary</Text>
                     <Text style={[styles.cancelText, { color: colors.text }]}>
-                      Deduction: Rs. {Number(item.cancellation_deducation || 0).toFixed(2)}
+                      Deduction: ₹ {Number(item.cancellation_deducation || 0).toFixed(2)}
                     </Text>
                     <Text style={[styles.cancelText, { color: colors.text }]}>
-                      Refund: Rs. {(Number(item.total) - Number(item.cancellation_deducation || 0)).toFixed(2)}
+                      Refund: ₹ {(Number(item.total) - Number(item.cancellation_deducation || 0)).toFixed(2)}
                     </Text>
                   </View>
                 ) : null}
@@ -256,10 +256,10 @@ const InvoiceHallDetails: React.FC<Props> = ({ route }) => {
           <PaymentSummaryCard
             status={data.payment?.status || data.payment_status}
             items={[
-              { label: 'Subtotal', value: `Rs. ${Number(data.invoice?.subtotal || 0).toFixed(2)}` },
-              { label: 'GST', value: `Rs. ${Number(data.invoice?.gst_total || 0).toFixed(2)}` },
-              { label: 'Security', value: `Rs. ${Number(data.invoice?.security_total || 0).toFixed(2)}` },
-              { label: 'Grand total', value: `Rs. ${Number(data.invoice?.total || 0).toFixed(2)}`, emphasize: true },
+              { label: 'Subtotal', value: `₹ ${Number(data.invoice?.subtotal || 0).toFixed(2)}` },
+              { label: 'GST', value: `₹ ${Number(data.invoice?.gst_total || 0).toFixed(2)}` },
+              { label: 'Security', value: `₹ ${Number(data.invoice?.security_total || 0).toFixed(2)}` },
+              { label: 'Grand total', value: `₹ ${Number(data.invoice?.total || 0).toFixed(2)}`, emphasize: true },
               { label: 'Reference', value: data.payment?.reference_number || data.payment_info?.bank_refrance_no || 'Pending' },
             ]}
           />

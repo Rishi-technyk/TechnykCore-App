@@ -181,6 +181,7 @@ const Profile: React.FC = () => {
     ],
     [profileData],
   );
+console.log( profileData, '---------------------- profileData ---------------------');
 
   const renderInfoCard = ({ item }: { item: { id: string; name: string; detail: string } }) => (
     <Card style={styles.infoCard}>

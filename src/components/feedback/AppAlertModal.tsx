@@ -33,7 +33,7 @@ const toneConfig = {
   },
   info: {
     icon: 'information',
-    getColor: (colors: any) => colors.primary,
+    getColor: (colors: any) => colors.border,
   },
 };
 

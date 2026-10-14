@@ -354,25 +354,25 @@ const TeeBuddies = ({ navigation, route }: any) => {
               }`}
               status={`${timer}s left`}
               statusTone={timer > 15 ? 'warning' : 'danger'}
-              meta={[
-                {
-                  label: 'Session',
-                  value: route?.params?.session?.session_name || 'N/A',
-                },
-                {
-                  label: 'Players',
-                  value: `${selectedBuddy.length}/4`,
-                },
-                {
-                  label: 'Mode',
-                  value: route?.params?.data?.bookingId ? 'Edit' : 'Reserve',
-                },
-              ]}
+              // meta={[
+              //   {
+              //     label: 'Session',
+              //     value: route?.params?.session?.session_name || 'N/A',
+              //   },
+              //   {
+              //     label: 'Players',
+              //     value: `${selectedBuddy.length}/4`,
+              //   },
+              //   {
+              //     label: 'Mode',
+              //     value: route?.params?.data?.bookingId ? 'Edit' : 'Reserve',
+              //   },
+              // ]}
             />
 
             <DetailSection
               title="Selected players"
-              subtitle="Keep a full and valid group before confirming the tee slot."
+              // subtitle="Keep a full and valid group before confirming the tee slot."
               delay={40}
             >
               <View style={styles.selectedGrid}>
@@ -426,7 +426,7 @@ const TeeBuddies = ({ navigation, route }: any) => {
 
             <DetailSection
               title="Pick from saved players"
-              subtitle="Switch between direct buddy search and your favorite groups."
+              // subtitle="Switch between direct buddy search and your favorite groups."
               delay={70}
             >
               <View style={styles.filterRow}>
@@ -484,23 +484,51 @@ const TeeBuddies = ({ navigation, route }: any) => {
             />
           )
         }
-        ListFooterComponent={
-          <View
+        // ListFooterComponent={
+        //   <View
+        //     style={[
+        //       styles.footer,
+        //       {
+        //         backgroundColor: colors.surface,
+        //         borderColor: colors.border,
+        //       },
+        //     ]}
+        //   >
+        //     <View style={{ flex: 1 }}>
+        //       <Text style={[styles.footerTitle, { color: colors.text }]}>
+        //         {selectedBuddy.length} players selected
+        //       </Text>
+        //       {/* <Text style={[styles.footerSubtitle, { color: colors.textMuted }]}>
+        //         Minimum 3 players required to reserve this tee slot.
+        //       </Text> */}
+        //     </View>
+        //     {selectedBuddy.length >= 3 ? (
+        //       <NewButton
+        //         loading={loading}
+        //         text={route?.params?.data?.bookingId ? 'Update' : 'Reserve'}
+        //         onPress={reserveSlot}
+        //       />
+        //     ) : null}
+        //   </View>
+        // }
+      />
+  <View
             style={[
               styles.footer,
               {
                 backgroundColor: colors.surface,
                 borderColor: colors.border,
+                marginBottom:20
               },
             ]}
           >
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, }}>
               <Text style={[styles.footerTitle, { color: colors.text }]}>
                 {selectedBuddy.length} players selected
               </Text>
-              <Text style={[styles.footerSubtitle, { color: colors.textMuted }]}>
+              {/* <Text style={[styles.footerSubtitle, { color: colors.textMuted }]}>
                 Minimum 3 players required to reserve this tee slot.
-              </Text>
+              </Text> */}
             </View>
             {selectedBuddy.length >= 3 ? (
               <NewButton
@@ -510,9 +538,6 @@ const TeeBuddies = ({ navigation, route }: any) => {
               />
             ) : null}
           </View>
-        }
-      />
-
       {visible ? (
         <PlayerDetalModal
           visible={visible}

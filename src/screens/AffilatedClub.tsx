@@ -203,20 +203,7 @@ const AffilatedClubScreen: React.FC<Props> = () => {
           </View>
         </View>
 
-        <View style={styles.metaRow}>
-          <InfoPill
-            icon="identifier"
-            label={item.code || 'No code listed'}
-            styles={styles}
-            color={colors.textMuted}
-          />
-          <InfoPill
-            icon="map-marker-outline"
-            label={item.city_name || item.city || 'Location not listed'}
-            styles={styles}
-            color={colors.textMuted}
-          />
-        </View>
+     
 
         {item.address ? (
           <View style={styles.detailRow}>
@@ -264,6 +251,13 @@ const AffilatedClubScreen: React.FC<Props> = () => {
             styles={styles}
             color={colors.text}
           />
+           <ActionButton
+            icon="map-marker-outline"
+            label={item.city_name || item.city || 'Location not listed'}
+            styles={styles}
+             onPress={() => {}}
+            color={colors.textMuted}
+          />
         </View>
       </View>
     );
@@ -292,7 +286,7 @@ const AffilatedClubScreen: React.FC<Props> = () => {
             <BookingHeroCard
               eyebrow="Club Network"
               title="Affiliated Club Directory"
-              subtitle="Search partner clubs, review contact details, and jump into calls or website links without leaving the app."
+              // subtitle="Search partner clubs, review contact details, and jump into calls or website links without leaving the app."
               status={`${meta.total_clubs || clubs.length} clubs`}
               statusTone="neutral"
               meta={[

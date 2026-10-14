@@ -72,6 +72,9 @@ import EventSeats from '../services/Events/EventSeats';
 import StaffHome from '../screens/KOTStaff/StaffHome';
 import { useAppTheme } from '../theme/AppThemeProvider';
 import FoodMenu from '../screens/FoodOrder/FoodMenu';
+import MemberFoodCart from '../screens/FoodOrder/MemberFoodCart';
+import MemberOrderDetails from '../screens/FoodOrder/MemberOrderDetails';
+import ViewBill from '../screens/ViewBill';
 
 /* -----------------------------------------------------------
    TYPE DEFINITIONS FOR NAVIGATION
@@ -204,7 +207,14 @@ export type AppStackParamList = {
   Miscellaneous: undefined;
   Camera: undefined;
   ClubMenu: undefined;
-  FoodMenu:undefined;
+  FoodMenu: {
+    orderType: 'take_away' | 'home_delivery';
+  };
+  MemberFoodCart: {paymentMode:{
+    Card:boolean,
+    Subscription:boolean
+  }};
+  MemberOrderDetails:undefined;
 };
 
 export type RootStackParamList = {
@@ -325,7 +335,7 @@ const AppStackScreens = () => {
       <Stack.Screen name="Contact" component={Contact} />
       <Stack.Screen name="Notification" component={NotificationListScreen} />
       <Stack.Screen name="Invoice" component={ViewStatement} />
-
+      <Stack.Screen name="ViewBill" component={ViewBill} />
       <Stack.Screen name="PDFView" component={PDFComponent} />
       <Stack.Screen name="Rooms" component={Room} />
       <Stack.Screen name="AffilatedClub" component={AffilatedClub} />
@@ -393,6 +403,8 @@ const AppStackScreens = () => {
 
       {/* Food Order*/}
        <Stack.Screen name="FoodMenu" component={FoodMenu} />
+       <Stack.Screen name="MemberFoodCart" component={MemberFoodCart} />
+       <Stack.Screen name="MemberOrderDetails" component={MemberOrderDetails} />
     </Stack.Navigator>
   );
 };

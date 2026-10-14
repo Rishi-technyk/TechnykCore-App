@@ -67,7 +67,9 @@ export const TICKET_THEME = {
 export const PLACEHOLDER_COLOR = withFallback(THEME_LIGHT_PLACEHOLDER, '#363b5d');
 export const FONT_FAMILY = {
   normal: 'OpenSans-Regular',
+  regular:'OpenSans-Regular',
   bold: 'OpenSans-Bold',
+    medium: 'OpenSans-SemiBold',
   light: "OpenSans-Light",
   semiBold: "OpenSans-SemiBold",
 } as const;

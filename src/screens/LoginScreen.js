@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
     <AuthScreenLayout title={'Sign in'} forgotPasswordText={true}>
       <TextInput
         ref={userRef}
-        placeholder="MemberID (A-0000)"
+        placeholder="MemberID (001A)"
         value={email}
         onChangeText={setEmail}
         style={[Loginstyles.input, styles.input]}
@@ -91,7 +91,7 @@ const LoginScreen = ({ navigation }) => {
 
       <TextInput
         ref={passRef}
-        placeholder="Password"
+        placeholder="Password (DDMMYYYY)"
         value={password}
         onChangeText={setPassword}
         style={[Loginstyles.input, styles.input]}

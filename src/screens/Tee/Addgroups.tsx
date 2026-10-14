@@ -283,16 +283,7 @@ const Addgroups = ({ navigation, route }) => {
 
   const listHeader = (
     <View>
-      <BookingHeroCard
-        eyebrow={isGroupMode ? 'Favorite Four' : 'Tee Buddy'}
-        title={edit?.id ? `Update ${type}` : `Create ${type}`}
-        subtitle={`${data?.session_name || 'Session'} • ${helperText}`}
-        status={selectedCountLabel}
-        meta={[
-          { label: 'Session', value: data?.session_name || 'N/A', tone: 'neutral' },
-          { label: 'Mode', value: edit?.id ? 'Edit' : 'Create', tone: 'neutral' },
-        ]}
-      />
+    
 
       <DetailSection
         title="Selected Players"
@@ -340,8 +331,8 @@ const Addgroups = ({ navigation, route }) => {
 
       {isGroupMode ? (
         <DetailSection
-          title="Group Identity"
-          subtitle="Use a recognizable name so you can pick this four quickly during tee booking."
+          title="Group Name"
+          // subtitle="Use a recognizable name so you can pick this four quickly during tee booking."
           delay={80}
         >
           <TextInput
@@ -368,7 +359,7 @@ const Addgroups = ({ navigation, route }) => {
 
       <DetailSection
         title="Add Players"
-        subtitle="Search available members for this session and tap to add them."
+        // subtitle="Search available members for this session and tap to add them."
         delay={120}
       >
         <View

@@ -99,7 +99,7 @@ const Events: React.FC<Props> = ({ navigation, route }) => {
   const updateQty = (id: number, qty: number) => {
     setCart(previous => ({ ...previous, [id]: qty }));
   };
-
+console.log( event?.image, '---------------------- event.image ---------------------');
   const ticketTotal = useMemo(
     () => tickets.reduce((sum, ticket) => sum + (cart[ticket.id] || 0) * Number(ticket.price || 0), 0),
     [cart, tickets],
@@ -200,22 +200,22 @@ const Events: React.FC<Props> = ({ navigation, route }) => {
                   subtitle={`${moment(event.date).format('ddd, DD MMM • h:mm A')} • ${
                     event.location || 'Club venue'
                   }`}
-                  status={isSeatsAvailable ? 'Seat booking' : 'Pass booking'}
+                  status={'Available'}
                   statusTone="success"
-                  meta={[
-                    {
-                      label: 'Remaining',
-                      value: String(event?.remaining_for_member ?? event?.max_per_member_tickets ?? 0),
-                    },
-                    {
-                      label: 'Tickets',
-                      value: String(visibleTickets.length),
-                    },
-                    {
-                      label: 'Waiters',
-                      value: event?.waiter?.remaining ? String(event.waiter.remaining) : 'N/A',
-                    },
-                  ]}
+                  // meta={[
+                  //   {
+                  //     label: 'Remaining',
+                  //     value: String(event?.remaining_for_member ?? event?.max_per_member_tickets ?? 0),
+                  //   },
+                  //   {
+                  //     label: 'Tickets',
+                  //     value: String(visibleTickets.length),
+                  //   },
+                  //   {
+                  //     label: 'Waiters',
+                  //     value: event?.waiter?.remaining ? String(event.waiter.remaining) : 'N/A',
+                  //   },
+                  // ]}
                 />
               </>
             ) : null}
@@ -223,7 +223,7 @@ const Events: React.FC<Props> = ({ navigation, route }) => {
             {member ? (
               <DetailSection
                 title="Member checkout details"
-                subtitle="This member profile will be passed through event checkout and payment."
+                // subtitle="This member profile will be passed through event checkout and payment."
                 delay={40}
               >
                 <View style={styles.profileGrid}>
@@ -293,8 +293,8 @@ const Events: React.FC<Props> = ({ navigation, route }) => {
             ) : null}
 
             <DetailSection
-              title="Choose passes"
-              subtitle="Select the ticket mix. Limits and complimentary logic remain controlled by the backend response."
+              title="Event passes"
+              // subtitle="Select the ticket mix. Limits and complimentary logic remain controlled by the backend response."
               delay={70}
             >
               {loading
@@ -312,7 +312,7 @@ const Events: React.FC<Props> = ({ navigation, route }) => {
             {event?.waiter && event?.waiter?.remaining > 0 ? (
               <DetailSection
                 title="Optional add-on"
-                subtitle="Add personal waiters if the event configuration allows them."
+                // subtitle="Add personal waiters if the event configuration allows them."
                 delay={100}
               >
                 <View
@@ -358,7 +358,7 @@ const Events: React.FC<Props> = ({ navigation, route }) => {
 
             <DetailSection
               title="Checkout summary"
-              subtitle="This total is passed to seat selection or directly into the event payment review."
+              // subtitle="This total is passed to seat selection or directly into the event payment review."
               delay={130}
             >
               <View style={styles.summaryRow}>

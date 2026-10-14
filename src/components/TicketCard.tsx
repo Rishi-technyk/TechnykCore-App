@@ -43,9 +43,9 @@ const TicketCard: React.FC<Props> = ({ data, quantity, onChange }) => {
         <View style={styles.heroHeader}>
           <View style={{ flex: 1 }}>
             <Text style={styles.title}>{data?.title}</Text>
-            <Text style={styles.description}>
+            {/* <Text style={styles.description}>
               {data?.description || 'Event access pass'}
-            </Text>
+            </Text> */}
           </View>
 
           <View style={styles.priceBadge}>

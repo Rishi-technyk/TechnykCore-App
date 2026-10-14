@@ -17,7 +17,7 @@ import Header from '../components/Header';
 import DatePickerComponent from '../components/DatePicker';
 import NewButton from '../components/Button';
 import UniversalModal from '../components/UniversalModal';
-import AIFilter from '../components/AIFilter';
+// import AIFilter from '../components/AIFilter';
 import { askFinancialAi, useStatementDashboard } from '../services/ViewStatementService';
 import { javascriptPost } from '../util/api';
 import { useAppTheme } from '../theme/AppThemeProvider';
@@ -42,7 +42,12 @@ const initialFilters = {
   limit: 150,
 };
 
-const currency = value => `₹${Number(value || 0).toFixed(2)}`;
+const currency = value => {
+    const num = Number(value || 0);
+    return num < 0
+        ? `- ₹${Math.abs(num).toFixed(2)}`
+        : `₹${num.toFixed(2)}`;
+};
 
 type Props = NativeStackScreenProps<AppStackParamList,'ViewStatement'>;
 const ViewStatement:React.FC<Props> = ({ navigation }) => {
@@ -145,32 +150,32 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
     }
   };
 
-  const handleAskAi = async prompt => {
-    try {
-      setAiLoading(true);
-      const response = await askFinancialAi({
-        contextType: 'statement',
-        prompt,
-        filters,
-        token: userData?.token,
-      });
+  // const handleAskAi = async prompt => {
+  //   try {
+  //     setAiLoading(true);
+  //     const response = await askFinancialAi({
+  //       contextType: 'statement',
+  //       prompt,
+  //       filters,
+  //       token: userData?.token,
+  //     });
 
-      setAiAnswer(response?.data?.answer || 'No insight available yet.');
-      showAlert({
-        title: 'AI insight ready',
-        message: 'Your statement analysis is ready to review.',
-        tone: 'success',
-      });
-    } catch (error) {
-      showAlert({
-        title: 'AI unavailable',
-        message: 'Unable to fetch AI insight right now.',
-        tone: 'danger',
-      });
-    } finally {
-      setAiLoading(false);
-    }
-  };
+  //     setAiAnswer(response?.data?.answer || 'No insight available yet.');
+  //     showAlert({
+  //       title: 'AI insight ready',
+  //       message: 'Your statement analysis is ready to review.',
+  //       tone: 'success',
+  //     });
+  //   } catch (error) {
+  //     showAlert({
+  //       title: 'AI unavailable',
+  //       message: 'Unable to fetch AI insight right now.',
+  //       tone: 'danger',
+  //     });
+  //   } finally {
+  //     setAiLoading(false);
+  //   }
+  // };
 
   const renderTrendItem = item => (
     <View key={item.month} style={styles.trendCard}>
@@ -221,11 +226,12 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
         title="Subscription"
         OpenDropDawn={() => setShowFilterModal(true)}
         isMulti={true}
-        isDawnload={false}
+        isDawnload={true}
+        type="Invoice"
       >
-        <View style={styles.rightControls}>
+        {/* <View style={styles.rightControls}>
           <AIFilter onApply={handleAskAi} loading={aiLoading} title="Ask AI" />
-        </View>
+        </View> */}
       </Header>
 
       <ScrollView
@@ -255,12 +261,14 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
               <Text style={styles.eyebrow}>Current Outstanding</Text>
               <Text style={styles.heroValue}>{currency(summary.outstanding_amount)}</Text>
             </View>
-            <TouchableOpacity
+ {(summary.pdf_exsist || summary.pdf) &&  <TouchableOpacity
               style={styles.billButton}
               activeOpacity={0.85}
               onPress={() =>
-                summary.pdf
-                  ? navigation.navigate('PDFView', {
+               { summary.pdf_exsist
+                  ? navigation.navigate('ViewBill') :
+                  summary.pdf ?
+                   navigation.navigate('PDFView', {
                       url: summary.pdf,
                       title: 'Statement',
                     })
@@ -268,27 +276,30 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
                       title: 'Bill unavailable',
                       message: 'No bill is available to view right now.',
                       tone: 'warning',
-                    })
+                    })}
               }
             >
               <Text style={styles.billButtonText}>View Bill</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
           </View>
 
           <View style={styles.heroStats}>
-            <View style={styles.heroStat}>
+            {/* <View style={styles.heroStat}>
               <Text style={styles.heroLabel}>Available Credit</Text>
               <Text style={styles.heroAmount}>{currency(summary.available_credit)}</Text>
-            </View>
+            </View> */}
             <View style={styles.heroStat}>
-              <Text style={styles.heroLabel}>Bill Amount</Text>
+              <Text style={styles.heroLabel}>Last Bill Amount</Text>
               <Text style={styles.heroAmount}>{currency(summary.bill_amount)}</Text>
             </View>
           </View>
         </View>
 
         <View style={styles.analyticsRow}>
-          <View style={styles.metricCard}>
+            <View style={styles.metricCard}>
+               <Text style={styles.metricLabel}>Payments may take a few minutes to reflect after a successful transaction.</Text>
+            </View>
+          {/* <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Net Flow</Text>
             <Text style={styles.metricValue}>{currency(cards.net_flow)}</Text>
           </View>
@@ -299,11 +310,11 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Debits</Text>
             <Text style={styles.metricValue}>{currency(cards.debit_total)}</Text>
-          </View>
+          </View> */}
         </View>
 
         <View style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>Payment Action</Text>
+           <Text style={styles.sectionTitle}>Amount to be paid</Text>
           <View style={styles.payRow}>
             <TextInput
               style={[styles.amountInput, amountError ? styles.amountInputError : null]}
@@ -325,7 +336,7 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
           {!!amountError && <Text style={styles.errorText}>{amountError}</Text>}
         </View>
 
-        <View style={styles.sectionCard}>
+        {/* <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Highlights</Text>
           <Text style={styles.infoLine}>
             Largest credit: <Text style={styles.infoStrong}>{currency(highlights.largest_credit)}</Text>
@@ -339,9 +350,9 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
           <Text style={styles.infoLine}>
             Average debit: <Text style={styles.infoStrong}>{currency(highlights.average_debit)}</Text>
           </Text>
-        </View>
+        </View> */}
 
-        {aiAnswer ? (
+        {/* {aiAnswer ? (
           <View style={styles.aiCard}>
             <View style={styles.aiHeader}>
               <Icon name="robot-outline" size={18} color={colors.primary} />
@@ -358,7 +369,7 @@ const ViewStatement:React.FC<Props> = ({ navigation }) => {
               {trend.map(renderTrendItem)}
             </ScrollView>
           </View>
-        ) : null}
+        ) : null} */}
 
         <View style={styles.sectionCard}>
           <View style={styles.sectionHeader}>
@@ -839,7 +850,7 @@ const createStyles = colors =>
     },
       rightControls: {
       position: 'absolute',
-      right: 60,
+      right: 90,
       top: 12,
       flexDirection: 'row',
       alignItems: 'center',

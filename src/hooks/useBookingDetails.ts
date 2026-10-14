@@ -27,6 +27,7 @@ export const useBookingDetails = ({
         Token: token,
       });
 
+console.log( response, '---------------------- response ---------------------');
       return transform ? transform(response) : response;
     },
     enabled: enabled && !!token,

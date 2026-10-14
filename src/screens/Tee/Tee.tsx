@@ -164,14 +164,14 @@ const Tee: React.FC<Props> = ({ navigation }) => {
         };
       }
 
-      if (item?.is_active === 0) {
-        return {
-          label: 'Inactive',
-          tone: 'danger',
-          color: colors.textMuted,
-          backgroundColor: `${colors.textMuted}18`,
-        };
-      }
+      // if (item?.is_active === 0) {
+      //   return {
+      //     label: 'Inactive',
+      //     tone: 'danger',
+      //     color: colors.textMuted,
+      //     backgroundColor: `${colors.textMuted}18`,
+      //   };
+      // }
 
       return {
         label: 'Available',
@@ -189,7 +189,9 @@ const Tee: React.FC<Props> = ({ navigation }) => {
     if (isSwitchEnabled) {
       sheets = sheets.filter((item: any) =>
        {
-        return  item.is_active == 1 && item.is_booked != 1}
+        return  item.is_booked != 1
+        // item.is_active == 1 &&
+         }
     );
     }
     if (hole?.id) {
@@ -259,7 +261,7 @@ const Tee: React.FC<Props> = ({ navigation }) => {
       lockedTill > now &&
       item?.locked_by_user !== userData?.user?.id;
     const canReserve =
-      item?.is_active !== 0 &&
+      // item?.is_active !== 0 &&
       item?.is_booked !== 1 &&
       item?.is_locked_by_admin !== 1 &&
       !isReservedByOther;
@@ -360,8 +362,8 @@ const Tee: React.FC<Props> = ({ navigation }) => {
       />
 
       <DetailSection
-        title="Booking controls"
-        subtitle="Filter the tee sheet by day, session, and starting hole."
+        title="Booking Date"
+        // subtitle="Filter the tee sheet by day, session, and starting hole."
         delay={40}
       >
         <CalendarStrip
@@ -432,9 +434,7 @@ const Tee: React.FC<Props> = ({ navigation }) => {
         >
           <View>
             <Text style={[styles.switchTitle, { color: colors.text }]}>Show active only</Text>
-            <Text style={[styles.switchSubtitle, { color: colors.textMuted }]}>
-              Hide booked and inactive tee sheets for faster selection.
-            </Text>
+            
           </View>
           <Switch
             value={isSwitchEnabled}

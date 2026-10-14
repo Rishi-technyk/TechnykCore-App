@@ -2,6 +2,15 @@ PODS:
   - boost (1.84.0)
   - BVLinearGradient (2.8.3):
     - React-Core
+  - CashfreeAnalyticsSDK (2.3.3):
+    - CFNetworkSDK (= 2.3.3)
+  - CashfreePG (2.3.7):
+    - CashfreePGUISDK (= 2.3.7)
+  - CashfreePGCoreSDK (2.3.7):
+    - CashfreeAnalyticsSDK (= 2.3.3)
+  - CashfreePGUISDK (2.3.7):
+    - CashfreePGCoreSDK (= 2.3.7)
+  - CFNetworkSDK (2.3.3)
   - DoubleConversion (1.1.6)
   - fast_float (8.0.0)
   - FBLazyVector (0.81.5)
@@ -1915,6 +1924,9 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - react-native-cashfree-pg-sdk (2.3.2):
+    - CashfreePG (= 2.3.7)
+    - React-Core
   - react-native-date-picker (5.0.13):
     - boost
     - DoubleConversion
@@ -1943,6 +1955,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - react-native-geolocation-service (5.3.1):
+    - React
   - react-native-image-picker (8.2.1):
     - boost
     - DoubleConversion
@@ -2753,6 +2767,34 @@ PODS:
     - RNNotifee/NotifeeCore (= 9.1.8)
   - RNNotifee/NotifeeCore (9.1.8):
     - React-Core
+  - RNPermissions (5.6.1):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - RNReanimated (4.3.1):
     - boost
     - DoubleConversion
@@ -3165,7 +3207,9 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
+  - react-native-cashfree-pg-sdk (from `../node_modules/react-native-cashfree-pg-sdk`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-nfc-manager (from `../node_modules/react-native-nfc-manager`)
   - react-native-pdf (from `../node_modules/react-native-pdf`)
@@ -3211,6 +3255,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
@@ -3223,6 +3268,11 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CashfreeAnalyticsSDK
+    - CashfreePG
+    - CashfreePGCoreSDK
+    - CashfreePGUISDK
+    - CFNetworkSDK
     - Firebase
     - FirebaseCore
     - FirebaseCoreExtension
@@ -3328,8 +3378,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-blob-util:
     :path: "../node_modules/react-native-blob-util"
+  react-native-cashfree-pg-sdk:
+    :path: "../node_modules/react-native-cashfree-pg-sdk"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-nfc-manager:
@@ -3420,6 +3474,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-inappbrowser-reborn"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -3440,6 +3496,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
+  CashfreeAnalyticsSDK: 11f37b2323be07bf07948bd6046b7c19e947ae07
+  CashfreePG: 88c1cdaa0ab8decb1c2e02263cca37eda9f30c59
+  CashfreePGCoreSDK: 0895818f75ea22e347e715a285cf241fe01f4349
+  CashfreePGUISDK: 2e4a3be02dbaf0af48520c573eb08585491b5545
+  CFNetworkSDK: 6a6261de10185efd4d2957583f0cbad395999cac
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 5beb8028d5a2e75dd9634917f23e23d3a061d2aa
@@ -3495,7 +3556,9 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-blob-util: 6dec9023ecc3ee5ac8ad377598e943f9ca63f741
+  react-native-cashfree-pg-sdk: 163291ea095e796c45dc972839caab97a31af697
   react-native-date-picker: 4f4f40f6e65798038bb4b1bff47890c2be69c2e6
+  react-native-geolocation-service: 32b2c2a3b91e70ce2a8d0c684801aaeb0a07e0ec
   react-native-image-picker: 0314366753615115fa55c3cc937ac44cb7e75702
   react-native-nfc-manager: c8891e460b4943b695d63f7f4effc6345bbefc83
   react-native-pdf: 2886351f9ea698a820f53056afdabd6fa0ab726d
@@ -3541,6 +3604,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 552c97e0bcb541ff91259759ae49420501d9d5e4
   RNInAppBrowser: 904d24dc75e8e6c6c98a3160329192608946f9df
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
+  RNPermissions: 0acaad37859e06f8be02808c570d6658e2760bc0
   RNReanimated: 475b050772aaddb82af69ddb607ea2fcbca9a233
   RNScreens: d821082c6dd1cb397cc0c98b026eeafaa68be479
   RNShare: bf3fa119b277d4a1729553e870039427bcb80c93
@@ -3551,6 +3615,6 @@ SPEC CHECKSUMS:
   VisionCamera: 7187b3dac1ff3071234ead959ce311875748e14f
   Yoga: 728df40394d49f3f471688747cf558158b3a3bd1
 
-PODFILE CHECKSUM: 631d47f7df9dfbff76409aa15ae3640add4e5a1d
+PODFILE CHECKSUM: d77d502d9e0b97857d49ed8a7dc7b3b65045ddc8
 
 COCOAPODS: 1.16.2

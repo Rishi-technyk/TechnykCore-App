@@ -54,8 +54,8 @@ export const ENV: EnvConfig = {
 
 export const DOMAIN = {
   APP_NAME:APP_NAME,
-  // BASE: API_BASE_URL,
-  BASE: "http://10.0.2.2:8000/api/",
+  BASE: API_BASE_URL,
+  // BASE: "http://10.54.44.125:8000/api/",
 // BASE: "https://cgomanoida.org/member/api/v2/",
   LOCAL:API_LOCAL_URL,
   API_IMAGE_URL:API_IMAGE_URL,
@@ -191,6 +191,13 @@ export const ENDPOINT = {
   event_payment_failed:'member/event/payment-failed',
       process_event_payment:"member/tickets/process-payment", 
        process_admin_payment:"event/book-tickets",
+
+       // Member food order
+     member_food_menu:'member/food/menu',
+       member_food_checkout_summary:'member/food/checkout-summary',
+       member_food_orders:'member/food/orders',
+       member_food_cancel:'member/food/orders/',
+       member_food_order:'member/food/orders/',
 
        //mmr
        get_mmr_settings:'member/get-mmr',

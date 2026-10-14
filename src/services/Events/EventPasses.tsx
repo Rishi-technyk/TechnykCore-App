@@ -272,6 +272,8 @@ const generatePDF1 = async (item: any): Promise<void> => {
   const TicketItem = ({ item, booking }) => {
     const ref = useRef(null);
 
+
+console.log(item.qr_code , '----------------------  ---------------------');
     return (
       <View style={{ width, height }}>
 
@@ -322,10 +324,9 @@ const generatePDF1 = async (item: any): Promise<void> => {
             </View>
             <View style={styles.qrBox}>
               <View style={styles.qrWhiteBox}>
-                <SvgXml xml={atob(item.qr_code)} width={220} height={220} />
+            <SvgXml xml={atob(item.qr_code)} width={220} height={220} />
               </View>
             </View>
-
 
             <Text style={styles.name}>
               Member:{" "}

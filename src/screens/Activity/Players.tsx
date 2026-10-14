@@ -16,7 +16,6 @@ import { useSelector } from 'react-redux';
 
 import Header from '../../components/Header';
 import BookingHeroCard from '../../components/booking/BookingHeroCard';
-import DetailSection from '../../components/booking/DetailSection';
 import EmptyStateCard from '../../components/booking/EmptyStateCard';
 import AppAlertModal from '../../components/feedback/AppAlertModal';
 import { useAppAlert } from '../../hooks/useAppAlert';
@@ -180,7 +179,7 @@ const Players: React.FC<Props> = () => {
         },
         Token: userData?.token,
       });
-
+console.log( response, '---------------------- response ---------------------');
       if (response?.success || response?.status) {
         setShowModal(false);
         setPlayerForm(initialFormState);
@@ -192,11 +191,18 @@ const Players: React.FC<Props> = () => {
         });
         return;
       }
+let message = 'Unable to save player details right now.';
 
-      const message =
-        typeof response?.message === 'string'
-          ? response.message
-          : 'Unable to save player details right now.';
+if (typeof response?.message === 'string') {
+  message = response.message;
+} else if (
+  response?.message &&
+  typeof response.message === 'object'
+) {
+  message = Object.values(response.message)
+    .flat()
+    .join('\n');
+}
 
       showAlert({
         title: 'Save failed',
@@ -345,10 +351,10 @@ const Players: React.FC<Props> = () => {
 
   return (
     <View style={styles.screen}>
-      <Header title="My Players">
+      <Header title="My Guests">
         <TouchableOpacity style={styles.headerAction} onPress={openCreateModal}>
           <Icon name="plus" size={16} color={colors.onPrimary} />
-          <Text style={styles.headerActionText}>Add Player</Text>
+          <Text style={styles.headerActionText}>Add Guest</Text>
         </TouchableOpacity>
       </Header>
 
@@ -362,62 +368,16 @@ const Players: React.FC<Props> = () => {
           <View>
             <BookingHeroCard
               eyebrow="Activity Directory"
-              title="Player Manager"
-              subtitle="Manage saved activity players, mark favorites, and quickly search the shared player directory before a booking."
+              title="Guest Manager"
+              // subtitle="Manage saved activity players, mark favorites, and quickly search the shared player directory before a booking."
               status={`${savedPlayers.length} saved`}
               statusTone="neutral"
               meta={[
                 { label: 'Favorites', value: String(favoriteCount), tone: 'success' },
-                { label: 'Active Filters', value: String(activeFilterCount) },
+                // { label: 'Total', value: String(savedPlayers.length) },
               ]}
             />
 
-            <DetailSection
-              title="Search and Filters"
-              subtitle="Use quick filters for your private list, or search globally across available players."
-              delay={40}
-            >
-              <View style={styles.toolsCard}>
-                <View style={styles.searchWrap}>
-                  <Icon name="magnify" size={20} color={colors.textMuted} />
-                  <TextInput
-                    value={searchText}
-                    onChangeText={setSearchText}
-                    placeholder="Search player name or member ID"
-                    placeholderTextColor={colors.placeholder}
-                    style={styles.searchInput}
-                    cursorColor={colors.primary}
-                  />
-                  {guestQuery.isFetching ? (
-                    <Icon name="loading" size={18} color={colors.primary} />
-                  ) : null}
-                </View>
-
-                {!debouncedSearch ? (
-                  <View style={styles.filterRow}>
-                    {playerFilters.map(item => (
-                      <TouchableOpacity
-                        key={item.id}
-                        onPress={() => toggleFilter(item.id)}
-                        style={[
-                          styles.filterChip,
-                          item.is_active && styles.filterChipActive,
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            styles.filterChipText,
-                            item.is_active && styles.filterChipTextActive,
-                          ]}
-                        >
-                          {item.title}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                ) : null}
-              </View>
-            </DetailSection>
           </View>
         }
         ListEmptyComponent={
@@ -425,11 +385,9 @@ const Players: React.FC<Props> = () => {
             renderSkeleton()
           ) : (
             <EmptyStateCard
-              title={debouncedSearch ? 'No players found' : 'No saved players yet'}
+              title={  'No Active slots available for this activity.'}
               description={
-                debouncedSearch
-                  ? 'Try a broader search term or clear the search to see your saved players.'
-                  : 'Start by adding a player or marking activity participants as favorites.'
+               'Please check back later or contact support for assistance.'
               }
             />
           )
@@ -440,12 +398,12 @@ const Players: React.FC<Props> = () => {
         isFull
         visible={showModal}
         onClose={() => setShowModal(false)}
-        title={playerForm.is_update ? 'Edit Player' : 'Add Player'}
+        title={playerForm.is_update ? 'Edit Guest' : 'Add Guest'}
         setVisible={setShowModal}
       >
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>
-            {playerForm.is_update ? 'Update player details' : 'Create a new saved player'}
+            {playerForm.is_update ? 'Update guest details' : 'Create a new saved guest'}
           </Text>
           <Text style={styles.modalSubtitle}>
             These values are posted to the existing activity guest APIs, so the backend and booking flows stay unchanged.
@@ -453,7 +411,7 @@ const Players: React.FC<Props> = () => {
 
           <TextInput
             value={playerForm.name}
-            placeholder="Player name"
+            placeholder="Guest name"
             placeholderTextColor={colors.placeholder}
             style={styles.input}
             onChangeText={text => setPlayerForm(prev => ({ ...prev, name: text }))}
@@ -484,7 +442,7 @@ const Players: React.FC<Props> = () => {
           <NewButton
             loading={saving}
             onPress={handleSavePlayer}
-            text={playerForm.is_update ? 'Update Player' : 'Add Player'}
+            text={playerForm.is_update ? 'Update Guest' : 'Add Guest'}
           />
         </View>
       </UniversalModal>

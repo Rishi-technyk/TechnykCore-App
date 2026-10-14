@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Image,
   Pressable,
@@ -12,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import { APP_NAME } from '@env';
+import { getDistance } from 'geolib';
 import {
   DrawerActions,
   NavigationProp,
@@ -39,6 +41,7 @@ import { javascriptGet } from '../util/api';
 import MemberOrderTypeModal from '../components/MemberOrderTypeModal';
 import { useAppTheme } from '../theme/AppThemeProvider';
 import { DOMAIN } from '../util/constant';
+import { getCurrentLocation } from '../util/locationHelper';
 
 type MenuItem = {
   id?: string | number;
@@ -114,6 +117,7 @@ const HomeScreen: React.FC = () => {
 colors.surfaceAlt
   const [orderType, setOrderType] = useState<boolean>(false);
   const [screens2, setScreens2] = useState<MenuItem[]>([]);
+  console.log( screens2, '---------------------- screens2 ---------------------');
   const [screens, setScreens] = useState<MenuItem[]>([]);
   const [otpModal, setOTPModal] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -173,9 +177,46 @@ colors.surfaceAlt
     } catch {
     }
   };
+  console.log( summary, '---------------------- summary.location_enable ---------------------');
+ const validateClubLocation = async () => {
+    try {
+      
+      if(summary.location_enable==='Inactive'){
+        return true
+      }
+      const location = await getCurrentLocation();
+    
+      if (!location) return false;
 
+      const distance = getDistance(
+        {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
+       {latitude:Number(summary?.latitude).toFixed(6),
+        longitude:Number(summary?.longitude).toFixed(6) ,
+       },
+      );
+
+      if (distance <= Number(summary?.radius)) {
+        return true;
+      }
+
+      Alert.alert(
+        'Outside Club',
+        `OTP feature unavailable outside the club. Please move inside to proceed.`,
+      );
+
+      return false;
+    } catch (e) {
+      Alert.alert('Location Error', e.message);
+
+      return false;
+    }
+  };
   const loadDashboard = async () => {
     const config = (await getDashboardConfig()) as DashboardConfig;
+    
     setScreens2(config.modules);
     setScreens(config.top_modules);
   };
@@ -236,7 +277,7 @@ colors.surfaceAlt
 
   const chunkArray = (arr: MenuItem[], size: number) => {
     const result = [];
-    for (let index = 0; index < arr.length; index += size) {
+    for (let index = 0; index < arr?.length; index += size) {
       result.push(arr.slice(index, index + size));
     }
     return result;
@@ -244,8 +285,8 @@ colors.surfaceAlt
 
   const sections = chunkArray(screens2, 3);
 
-  const navigateModule = (item: MenuItem, includeBalance?: boolean) => {
-    if (item.navigate === 'FoodOrder') {
+  const navigateModule = async(item: MenuItem, includeBalance?: boolean) => {
+    if (item.navigate === 'FoodOrder' || item.navigate === 'FoodMenu') {
       setOrderType(true);
       return;
     }
@@ -265,7 +306,12 @@ colors.surfaceAlt
     }
 
     if (item.name === 'OTP') {
-      setOTPModal(true);
+      setRefreshing(true)
+      const allowed = await validateClubLocation();
+ setRefreshing(false)
+      if (allowed) {
+        setOTPModal(true);
+      }
       return;
     }
 
@@ -275,7 +321,7 @@ colors.surfaceAlt
   const renderBigCard = (item: MenuItem) => (
     <Pressable style={styles.bigCard} onPress={() => navigateModule(item)}>
       <Text style={styles.bigTitle}>{item.name}</Text>
-      <Text style={styles.smallsubTitle}>{item.subTitle}</Text>
+      <Text style={styles.smallsubTitle} numberOfLines={4}>{item.subTitle}</Text>
       <Image
         source={{ uri: `${DOMAIN.IMG}icons/${item.icon}` }}
         style={styles.bigIcon}
@@ -474,7 +520,7 @@ colors.surfaceAlt
               <Text style={styles.balanceSubtext}>
                 {summary.bill_month_year
                   ? `Bill cycle ${summary.bill_month_year}`
-                  : 'Financial overview'}
+                  : 'Account overview'}
               </Text>
             </View>
           </View>
@@ -483,12 +529,12 @@ colors.surfaceAlt
         <View style={styles.snapshotCard}>
           <View style={styles.snapshotHeaderRow}>
             <View style={{ flex: 1,width:'60%' }}>
-              <Text style={styles.snapshotTitle}>Subscription and Dues</Text>
-              <Text style={styles.snapshotSubtitle}>
+              <Text style={styles.snapshotTitle}>Subscription Summary</Text>
+              {/* <Text style={styles.snapshotSubtitle}>
                 Dues, available limit, and payments.
-              </Text>
+              </Text> */}
             </View>
-            <View
+            {/* <View
               style={[
                 styles.statusChip,
                 {
@@ -512,30 +558,50 @@ colors.surfaceAlt
               >
                 {summary.pay_status?.toUpperCase() || 'PENDING'}
               </Text>
-            </View>
+            </View> */}
           </View>
 
           <View style={styles.summaryMetricsGrid}>
-            {renderSummaryMetric('Amount Payable', summary.amount_payable, 'warning')}
+            {/* {renderSummaryMetric('Amount Payable', summary.amount_payable, 'warning')}
             {renderSummaryMetric(
               'Available Limit',
               summary.available_credit,
               Number(summary.available_credit ?? 0) < 0 ? 'danger' : 'success',
             )}
             {renderSummaryMetric('Outstanding', summary.outstanding_amount, 'danger')}
-            {renderSummaryMetric('Unbilled Debit', summary.unbilled_debit, 'primary')}
+            {renderSummaryMetric('Unbilled Debit', summary.unbilled_debit, 'primary')} */}
+               {renderSummaryMetric(
+              'Last Bill Amount',
+              summary.bill_amount,
+              'primary',
+            )}
+            {renderSummaryMetric(
+              'Available Credit Limit',
+              summary.available_credit,
+              'primary',
+            )}
+            {renderSummaryMetric(
+              'Unbilled Credit',
+              summary.unbilled_credit,
+              'primary',
+            )}
+            {renderSummaryMetric(
+              'Unbilled Debit',
+              summary.unbilled_debit,
+              'primary',
+            )}
           </View>
 
          
         </View>
 
         <View style={styles.analyticsSection}>
-          <Text style={styles.sectionTitle}>Account overview</Text>
+          {/* <Text style={styles.sectionTitle}>Account overview</Text>
           <Text style={styles.sectionSubtitle}>
             Recent usage, recharge, and bill.
-          </Text>
+          </Text> */}
 
-          {homeDashboardQuery.isLoading && !homeDashboardQuery.data?.data ? (
+          {/* {homeDashboardQuery.isLoading && !homeDashboardQuery.data?.data ? (
             <View style={styles.loadingCard}>
               <ActivityIndicator color={colors.primary} />
               <Text style={styles.loadingText}>Loading member dashboard...</Text>
@@ -570,7 +636,7 @@ colors.surfaceAlt
                 );
               })}
             </View>
-          ) : null}
+          ) : null} */}
    <View style={styles.quickSection}>
           <Text style={styles.sectionTitle}>Transactions & A/C</Text>
           <Text style={styles.sectionSubtitle}>
@@ -579,7 +645,7 @@ colors.surfaceAlt
 
        
           <View style={styles.quickListContent}>
-          {screens.length > 0 ? (screens.map((screen, index) => (
+          {screens?.length > 0 ? (screens.map((screen, index) => (
             renderQuickAction({ item: screen, index } as { item: MenuItem; index: number })
           ))) : null}
           </View>
@@ -592,7 +658,7 @@ colors.surfaceAlt
           </Text>
           <View style={styles.facilityGrid}>{sections.map(renderSection)}</View>
         </View>
-          {insights.length > 0 ? (
+          {/* {insights.length > 0 ? (
             <View style={styles.insightStack}>
               {insights.map((insight, index) => {
                 const accentColor =
@@ -614,14 +680,14 @@ colors.surfaceAlt
                         {formatMetricValue(insight)}
                       </Text>
                     </View>
-                    {/* <Text style={styles.insightDescription}>
+                    <Text style={styles.insightDescription}>
                       {insight.description}
-                    </Text> */}
+                    </Text>
                   </View>
                 );
               })}
             </View>
-          ) : null}
+          ) : null} */}
 
           {trend.length > 0 ? (
             <View style={styles.trendCard}>
@@ -712,7 +778,7 @@ colors.surfaceAlt
                             : 'bank-transfer-out'
                         }
                         size={18}
-                        color={colors.primary}
+                        color={colors.text}
                       />
                     </View>
 
@@ -1069,6 +1135,7 @@ const createStyles = (colors: {
       backgroundColor: colors.surface,
       borderWidth: 1,
       borderColor: colors.border,
+
     },
     insightHeaderRow: {
       flexDirection: 'row',
@@ -1085,6 +1152,7 @@ const createStyles = (colors: {
     insightValue: {
       fontSize: 16,
       fontFamily: FONT_FAMILY.bold,
+      maxWidth:'60%'
     },
     insightDescription: {
       marginTop: 8,
@@ -1110,11 +1178,13 @@ const createStyles = (colors: {
       color: colors.text,
       fontSize: 15,
       fontFamily: FONT_FAMILY.bold,
+      maxWidth:'70%'
     },
     subSectionMeta: {
       color: colors.textMuted,
       fontSize: 11,
       fontFamily: FONT_FAMILY.normal,
+       maxWidth:'30%'
     },
     trendRow: {
       flexDirection: 'row',

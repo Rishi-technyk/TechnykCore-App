@@ -102,7 +102,7 @@ const SplashOverlay: React.FC<Props> = ({ visible, onFinish }) => {
             />
           </View>
 
-          <Text style={styles.title}>{APP_NAME} Club</Text>
+          <Text style={styles.title}>{APP_NAME}</Text>
           <Text style={styles.subtitle}>Experience the future of club management</Text>
 
           <View style={styles.loaderRow}>

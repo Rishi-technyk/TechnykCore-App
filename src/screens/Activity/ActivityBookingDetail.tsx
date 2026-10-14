@@ -47,6 +47,10 @@ const ActivityBookingDetail: React.FC<Props> = ({ route }) => {
     transform: response => (response?.success ? response.data : null),
   });
 
+
+console.log( data, '---------------------- data ---------------------');
+
+
   const handleDownload = useCallback(async () => {
     if (!data) {
       return;
@@ -86,6 +90,8 @@ const ActivityBookingDetail: React.FC<Props> = ({ route }) => {
       ],
     );
   }, [data]);
+
+
 
   const cancelSlot = useCallback(
     async (slotId: number) => {
@@ -139,7 +145,111 @@ const ActivityBookingDetail: React.FC<Props> = ({ route }) => {
     },
     [refresh, userData.token],
   );
+const cancelMembership = useCallback(
+  async (bookingId: number) => {
+    try {
+      // STEP 1 : Check cancellation eligibility
+      const eligibility = await javascriptGet({
+        path: `member/get-cancellation-amount/${bookingId}`,
+        Token: userData.token,
+      });
 
+      if (!eligibility?.status) {
+        Toast.show(
+          eligibility?.message || 'Cancellation is not allowed.',
+          {
+            type: 'warning',
+          },
+        );
+        return;
+      }
+
+      const policy = eligibility.cancelationAmount;
+
+      const bookingAmount = Number(policy.booking_amount ?? 0);
+      const deductionPercent = Number(policy.cancellation_per ?? 0);
+      const deductionAmount = Number(policy.cancellation_amt ?? 0);
+      const gstPercent = Number(policy.cancellation_GST ?? 0);
+      const gstAmount = Number(policy.cancellation_GST_amt ?? 0);
+
+      const refundAmount =
+        bookingAmount -
+        deductionAmount -
+        gstAmount;
+
+      Alert.alert(
+        'Cancel Booking',
+        `Booking Amount : ₹${bookingAmount.toFixed(2)}
+
+Deduction (${deductionPercent}%): ₹${deductionAmount.toFixed(2)}
+
+GST (${gstPercent}%): ₹${gstAmount.toFixed(2)}
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+Refund Amount : ₹${refundAmount.toFixed(2)}
+
+Do you want to cancel this membership?`,
+        [
+          {
+            text: 'No',
+            style: 'cancel',
+          },
+          {
+            text: 'Yes',
+            style: 'destructive',
+            onPress: async () => {
+              try {
+                const response = await javascriptPost({
+                  path: 'member/cancel-booking',
+                  Token: userData.token,
+                  body: {
+                    booking_id: bookingId,
+                    cancellation_per: deductionPercent,
+                    cancellation_amt: deductionAmount,
+                    cancellation_GST: gstPercent,
+                    cancellation_GST_amt: gstAmount,
+                    cancellation_deducation:
+                      deductionAmount + gstAmount,
+                  },
+                });
+
+                Toast.show(
+                  response?.message ??
+                    'Membership cancelled successfully.',
+                  {
+                    type: response?.status
+                      ? 'success'
+                      : 'danger',
+                  },
+                );
+
+                if (response?.status) {
+                  refresh();
+                }
+              } catch (error) {
+                Toast.show(
+                  'Unable to cancel membership.',
+                  {
+                    type: 'danger',
+                  },
+                );
+              }
+            },
+          },
+        ],
+      );
+    } catch (error) {
+      Toast.show(
+        'Unable to fetch cancellation policy.',
+        {
+          type: 'danger',
+        },
+      );
+    }
+  },
+  [refresh, userData.token],
+);
   const actionItems = useMemo(
     () => [
       { label: 'Download', icon: 'file-download-outline', onPress: handleDownload },
@@ -182,144 +292,238 @@ const ActivityBookingDetail: React.FC<Props> = ({ route }) => {
       >
         <BookingHeroCard
           eyebrow="Activity Booking"
-          title={data.facility_name}
-          subtitle={`${data.summary?.booking_number || data.booking_number} • ${data.summary?.booked_on || ''}`}
+        title={data.activity_name}
+
+subtitle={`${data.frequency_name} Membership`}
           status={data.summary?.status || data.status}
           statusTone={tone.color === colors.success ? 'success' : tone.color === colors.danger ? 'danger' : 'warning'}
-          meta={[
-            {
-              label: 'Payment',
-              value: data.payment?.status || data.payment_status,
-              tone:
-                tone.color === colors.success
-                  ? 'success'
-                  : tone.color === colors.danger
-                  ? 'danger'
-                  : 'warning',
-            },
-            {
-              label: 'Slots',
-              value: String(data.summary?.slot_count || data.slots?.length || 0),
-              tone: 'neutral',
-            },
-            {
-              label: 'Guests',
-              value: String(data.summary?.guest_count || 0),
-              tone: 'neutral',
-            },
-          ]}
+meta={[
+  {
+    label: 'Members',
+    value: String(data.summary?.members ?? 0),
+  },
+  {
+    label: 'Spouse',
+    value: String(data.summary?.spouse ?? 0),
+  },
+  {
+    label: 'Dependents',
+    value: String(data.summary?.dependents ?? 0),
+  },
+  {
+    label: 'Guests',
+    value: String(data.summary?.guests ?? 0),
+  },
+  {
+    label: 'Participants',
+    value: String(data.summary?.total_participants ?? 0),
+  },
+  {
+    label: 'Valid Till',
+    value: data.summary?.valid_to,
+  },
+]}
         />
 
-        <ActionBar actions={actionItems} />
+        {/* <ActionBar actions={actionItems} /> */}
 
         <DetailSection title="Booking Snapshot" subtitle="Quick overview of the facility reservation." delay={40}>
-          <DetailGrid
-            items={[
-              { label: 'Booking number', value: data.summary?.booking_number || data.booking_number, highlight: true },
-              { label: 'Facility', value: data.facility_name },
-              { label: 'Session', value: data.session_id || 'Scheduled' },
-              { label: 'Booked on', value: data.summary?.booked_on },
-              { label: 'Total amount', value: `Rs. ${Number(data.summary?.total_amount || data.facility_total).toFixed(2)}` },
-              { label: 'Payment', value: data.payment?.status || data.payment_status },
-            ]}
-          />
+        <DetailGrid
+items={[
+{
+label:'Booking No',
+value:data.summary.booking_number,
+highlight:true,
+},
+{
+label:'Activity',
+value:data.activity_name,
+},
+{
+label:'Plan',
+value:data.frequency_name,
+},
+{
+  label: 'Members',
+  value: data.summary?.members,
+},
+{
+  label: 'Spouse',
+  value: data.summary?.spouse,
+},
+{
+  label: 'Dependents',
+  value: data.summary?.dependents,
+},
+{
+  label: 'Guests',
+  value: data.summary?.guests,
+},
+{
+  label: 'Participants',
+  value: data.summary?.total_participants,
+},
+{
+label:'Valid From',
+value:data.summary.valid_from,
+},
+{
+label:'Valid To',
+value:data.summary.valid_to,
+},
+{
+label:'Status',
+value:data.summary.status,
+},
+]}
+/>
         </DetailSection>
+<DetailSection
+  title="Participants"
+  subtitle="Member details included in this booking."
+>
+  {data.participant_details?.map((item: any) => (
+    <View
+      key={item.id}
+      style={{
+        paddingVertical: 12,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: colors.border,
+      }}
+    >
+      <Text
+        style={{
+          color: colors.text,
+          fontWeight: '700',
+        }}
+      >
+        {item.name}
+      </Text>
 
-        <DetailSection title="Slots and Players" subtitle="Per-slot players, activity state, and cancellation actions." delay={70}>
-          {data.slots?.map((slot: any) => {
-            const slotTone = resolveTone(slot.status);
-            const canCancel =
-              String(slot.status).toLowerCase() === 'active' &&
-              moment(slot.slot_date).isSameOrAfter(moment(), 'day');
+      <Text style={{ color: colors.textMuted }}>
+        {item.type} • {item.player_id}
+      </Text>
 
-            return (
-              <View
-                key={slot.id}
-                style={[
-                  styles.slotCard,
-                  {
-                    backgroundColor: colors.surfaceAlt,
-                    borderColor: slotTone.border,
-                  },
-                ]}
-              >
-                <View style={styles.slotHeader}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={[styles.slotTitle, { color: colors.text }]}>
-                      {moment(slot.slot_date).format('ddd, DD MMM')} • {slot.label}
-                    </Text>
-                    <Text style={[styles.slotSub, { color: colors.textMuted }]}>
-                      {slot.guests?.length || 0} players
-                    </Text>
-                  </View>
-                  <View style={[styles.statusChip, { backgroundColor: slotTone.background }]}>
-                    <Text style={[styles.statusText, { color: slotTone.color }]}>{slot.status}</Text>
-                  </View>
-                </View>
-
-                {slot.guests?.map((guest: any, index: number) => (
-                  <View key={`${guest.player_name}-${index}`} style={styles.guestRow}>
-                    <Icon name="account-circle-outline" size={18} color={colors.primary} />
-                    <Text style={[styles.guestText, { color: colors.text }]}>
-                      {guest.player_name}
-                    </Text>
-                    <Text style={[styles.guestAmount, { color: colors.textMuted }]}>
-                      Rs. {Number(guest.occupant_charge || 0).toFixed(2)}
-                    </Text>
-                  </View>
-                ))}
-
-                {String(slot.status).toLowerCase() === 'cancelled' ? (
-                  <Text style={[styles.cancelInfo, { color: colors.danger }]}>
-                    Deduction: Rs. {Number(slot.cancellation_deducation || 0).toFixed(2)}
-                  </Text>
-                ) : null}
-
-                {canCancel ? (
-                  <TouchableOpacity
-                    style={[styles.cancelButton, { backgroundColor: colors.danger }]}
-                    onPress={() => cancelSlot(slot.id)}
-                  >
-                    <Icon name="close-circle-outline" size={16} color={colors.onPrimary} />
-                    <Text style={[styles.cancelButtonText, { color: colors.onPrimary }]}>
-                      Cancel slot
-                    </Text>
-                  </TouchableOpacity>
-                ) : null}
-              </View>
-            );
-          })}
-        </DetailSection>
+      <Text
+        style={{
+          color: colors.primary,
+          marginTop: 4,
+        }}
+      >
+        ₹ {item.total_amount.toFixed(2)}
+      </Text>
+    </View>
+  ))}
+</DetailSection>
 
         <DetailSection title="Payment and Invoice" subtitle="Charges, taxes, and transaction metadata." delay={100}>
-          <PaymentSummaryCard
-            status={data.payment?.status}
-            items={[
-              { label: 'Base facility amount', value: `Rs. ${Number(data.invoice?.facility_amount || 0).toFixed(2)}` },
-              { label: 'Guest charges', value: `Rs. ${Number(data.invoice?.guest_total_amount || 0).toFixed(2)}` },
-              { label: 'GST', value: `Rs. ${Number(data.invoice?.gst_total || 0).toFixed(2)}` },
-              { label: 'Grand total', value: `Rs. ${Number(data.invoice?.total || 0).toFixed(2)}`, emphasize: true },
-              { label: 'Reference', value: data.payment?.reference_number || data.payment?.gateway_order_id || 'Pending' },
-            ]}
-          />
+       <PaymentSummaryCard
+  status={data.payment?.status}
+  items={[
+    ...(data.invoice?.items || []).map((item: any) => ({
+      label: `${item.type} (${item.name})`,
+      value: `₹ ${Number(item.total).toFixed(2)}`,
+    })),
+
+    {
+      label: 'Subtotal',
+      value: `₹ ${Number(data.invoice.plan_amount).toFixed(2)}`,
+    },
+
+    {
+      label: 'GST',
+      value: `₹ ${Number(data.invoice.gst_amount).toFixed(2)}`,
+    },
+
+    {
+      label: 'Total',
+      value: `₹ ${Number(data.invoice.total).toFixed(2)}`,
+      emphasize: true,
+    },
+
+    ...(data.invoice?.refund
+      ? [
+          {
+            label: 'Cancellation Deduction',
+            value: `₹ ${Number(
+              data.invoice.refund.total_deduction,
+            ).toFixed(2)}`,
+          },
+          {
+            label: 'Refund Amount',
+            value: `₹ ${Number(
+              data.invoice.refund.refund_amount,
+            ).toFixed(2)}`,
+            emphasize: true,
+          },
+          // {
+          //   label: 'Refund Date',
+          //   value: data.invoice.refund.refund_date ?? '-',
+          // },
+        ]
+      : []),
+
+    // {
+    //   label: 'Reference',
+    //   value:
+    //     data.payment.reference_number ??
+    //     data.payment.gateway_order_id ??
+    //     '-',
+    // },
+  ]}
+/>
         </DetailSection>
 
-        <DetailSection title="Booking Timeline" subtitle="Operational updates for this reservation." delay={130}>
+        {data.summary?.status !== 'Cancelled' && data.can_cancel &&
+ data.payment?.status === 'Paid' &&
+ moment().isBefore(moment(data.valid_from)) && (
+  <TouchableOpacity
+    style={{
+      marginHorizontal: 16,
+      margin: 16,
+      paddingVertical: 14,
+      borderRadius: 12,
+      backgroundColor: '#DC2626',
+      alignItems: 'center',
+    }}
+    onPress={() => cancelMembership(data.id)}
+  >
+    <Text
+      style={{
+        color: '#FFF',
+        fontWeight: '700',
+        fontSize: 16,
+      }}
+    >
+      Cancel Booking
+    </Text>
+  </TouchableOpacity>
+)}
+
+        {/* <DetailSection title="Booking Timeline" subtitle="Operational updates for this reservation." delay={130}>
           <StatusTimeline items={data.timeline || []} />
-        </DetailSection>
-
+        </DetailSection> */}
+{/* 
         {paymentTimeline.length ? (
           <DetailSection title="Payment Timeline" subtitle="Financial checkpoints for this booking." delay={160}>
             <StatusTimeline items={paymentTimeline} />
           </DetailSection>
-        ) : null}
+        ) : null} */}
 
-        {data.activity_logs?.length ? (
+        {/* {data.activity_logs?.length ? (
           <DetailSection title="Activity Log" subtitle="Detailed slot-level activity summary." delay={190}>
             <StatusTimeline items={data.activity_logs} />
           </DetailSection>
-        ) : null}
+        ) : null} */}
+<DetailSection
+title="Membership Timeline"
+subtitle="Membership lifecycle">
 
+<StatusTimeline
+items={data.timeline || []}
+/>
+
+</DetailSection>
         <DetailSection title="Rules and Support" subtitle="Helpful reminders and member assistance." delay={220}>
           <View style={styles.ruleList}>
             {data.rules?.map((rule: string, index: number) => (

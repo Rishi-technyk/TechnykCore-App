@@ -250,32 +250,139 @@ const MyBookings: React.FC<Props> = ({ navigation, route }) => {
     );
   };
 
-  const renderActivityItem = ({ item }: { item: any }) => (
+  
+  // const renderActivityItem = ({ item }: { item: any }) => (
+  //   <TouchableOpacity
+  //     activeOpacity={0.8}
+  //     onPress={() => navigation.navigate('ActivityBookingDetail', { bookingId: item.id })}
+  //     style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+  //   >
+  //     <View style={styles.rowBetween}>
+  //       <Text style={[styles.cardTitle, { color: colors.text }]}>{item?.facility_name}</Text>
+  //       <Icon name="chevron-right" size={20} color={colors.text} />
+  //     </View>
+  //     <InfoRow label="Booking Number" value={item?.booking_number} colors={colors} />
+  //     <InfoRow
+  //       label="Booked On"
+  //       value={moment(item?.booking_date).format('Do MMM [at] h:mm A')}
+  //       colors={colors}
+  //     />
+  //     <InfoRow
+  //       label="Slot"
+  //       value={`${moment(item?.slot_date).format('Do MMM YY')} at ${item?.slot_label}`}
+  //       colors={colors}
+  //     />
+  //     <View style={[styles.badge, { alignSelf: 'flex-end', backgroundColor: getStatusTone(item?.status).bg }]}>
+  //       <Text style={[styles.badgeText, { color: getStatusTone(item?.status).fg }]}>{item?.status}</Text>
+  //     </View>
+  //   </TouchableOpacity>
+  // );
+
+  const renderActivityItem = ({ item }: { item: any }) => {
+  const participants = item?.participants ?? [];
+
+  return (
     <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => navigation.navigate('ActivityBookingDetail', { bookingId: item.id })}
-      style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+      activeOpacity={0.85}
+      onPress={() =>
+        navigation.navigate('ActivityBookingDetail', {
+          bookingId: item.id,
+        })
+      }
+      style={[
+        styles.card,
+        {
+          backgroundColor: colors.surface,
+          borderColor: colors.border,
+        },
+      ]}
     >
       <View style={styles.rowBetween}>
-        <Text style={[styles.cardTitle, { color: colors.text }]}>{item?.facility_name}</Text>
-        <Icon name="chevron-right" size={20} color={colors.text} />
+        <Text style={[styles.cardTitle, { color: colors.text }]}>
+          {item?.activity_name}
+        </Text>
+
+         <View
+        style={[
+          styles.badge,
+          {
+            alignSelf: 'flex-end',
+            backgroundColor: getStatusTone(item?.booking_status).bg,
+          },
+        ]}
+      >
+        <Text
+          style={[
+            styles.badgeText,
+            {
+              color: getStatusTone(item?.booking_status).fg,
+            },
+          ]}
+        >
+          {item?.booking_status}
+        </Text>
       </View>
-      <InfoRow label="Booking Number" value={item?.booking_number} colors={colors} />
+      </View>
+
+      <InfoRow
+        label="Booking No."
+        value={item?.booking_no}
+        colors={colors}
+      />
+
+      <InfoRow
+        label="Frequency"
+        value={item?.frequency_name}
+        colors={colors}
+      />
+
       <InfoRow
         label="Booked On"
-        value={moment(item?.booking_date).format('Do MMM [at] h:mm A')}
+        value={moment(item?.booking_date).format(
+          'DD MMM YYYY, hh:mm A',
+        )}
         colors={colors}
       />
+
       <InfoRow
-        label="Slot"
-        value={`${moment(item?.slot_date).format('Do MMM YY')} at ${item?.slot_label}`}
+        label="Validity"
+        value={`${moment(item?.valid_from).format(
+          'DD MMM YYYY',
+        )} - ${moment(item?.valid_to).format('DD MMM YYYY')}`}
         colors={colors}
       />
-      <View style={[styles.badge, { alignSelf: 'flex-end', backgroundColor: getStatusTone(item?.status).bg }]}>
-        <Text style={[styles.badgeText, { color: getStatusTone(item?.status).fg }]}>{item?.status}</Text>
-      </View>
+
+      <InfoRow
+        label="Participants"
+        value={`${participants.length}`}
+        colors={colors}
+      />
+
+      <InfoRow
+        label="Total Amount"
+        value={`₹ ${Number(item?.total_amount ?? 0).toFixed(2)}`}
+        colors={colors}
+      />
+
+    <InfoRow
+  label="Payment"
+  value={item?.payment_status}
+  colors={colors}
+  valueColor={
+    item?.payment_status === 'Paid'
+      ? '#16A34A' // Green
+      : item?.payment_status === 'Pending'
+      ? '#F59E0B' // Orange
+      : item?.payment_status === 'Failed'
+      ? '#DC2626' // Red
+      : colors.text
+  }
+/>
+
+    
     </TouchableOpacity>
   );
+};
 
   const renderEventItem = ({ item }: { item: any }) => (
     <Pressable
@@ -319,7 +426,7 @@ const MyBookings: React.FC<Props> = ({ navigation, route }) => {
       </View>
     </Pressable>
   );
-
+console.log( data, '---------------------- data ---------------------');
   const renderByTab = ({ item }: { item: any }) => {
     switch (toggle) {
       case 'Room':

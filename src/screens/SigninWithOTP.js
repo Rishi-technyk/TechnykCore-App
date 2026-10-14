@@ -64,7 +64,7 @@ const SigninWithOTP = ({navigation}) => {
     <Text style={[styles.label, {fontFamily:FONT_FAMILY.bold,margin:10}]}>Member ID</Text>
      <TextInput
     //   ref={passRef}
-        placeholder="MemberID (AA-01)"
+        placeholder="MemberID (001A)"
         value={usernameTextValue}
         onChangeText={setUsernameTextValue}
         placeholderTextColor={colors.placeholder}

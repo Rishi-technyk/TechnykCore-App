@@ -21,17 +21,21 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
   minDate,
   maxDate,
 }) => {
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(minDate ?? new Date());
   const [open, setOpen] = useState<boolean>(false);
   const [updateDate, setUpdateDate] = useState<boolean>(false);
   const { colors, resolvedMode } = useAppTheme();
   const styles = createStyles(colors);
 
+
   useEffect(() => {
     if (setResetDate === true) {
       setUpdateDate(false);
     }
-  }, [setResetDate]);
+     if (minDate) {
+    setDate(minDate);
+  }
+  }, [setResetDate,minDate]);
 
   return (
     <TouchableOpacity

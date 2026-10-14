@@ -114,6 +114,7 @@ const { data: settings } = useFetchSettingsQuery();
  * min_days = minimum days from today when booking can start
  */
 const minBookingOffset = settings?.min_days ?? 1;
+const maxBookingOffset = settings?.max_days ?? 30;
 
 /* ---------- BOOKING STATE ---------- */
 const [booking, setBooking] = useState<BookingState>(() => {
@@ -172,15 +173,17 @@ useEffect(() => {
     totalAmount: 0,
   }));
 }, [settings?.min_days]);
-useEffect(() => {
-  if (!sopResponse?.data) return;
 
-  setModalVisible(true);
-}, [sopResponse?.data]);
 const {
   data: sopResponse,
   isLoading: sopLoading,
 } = useFetchSOPQuery();
+
+useEffect(() => {
+  if (!sopResponse?.data) return;
+
+  setModalVisible(true);
+}, [sopResponse?.data,sopResponse]);
 useEffect(() => {
   const loadRooms = async () => {
     try {
@@ -490,6 +493,7 @@ const isBookingValid = useMemo(() => {
     updateDates(date, newCheckOut);
   }}
   onCancel={() => setOpenCheckIn(false)}
+  maximumDate={moment().add(maxBookingOffset, 'day').toDate()}
 />
 <DatePicker
   modal
@@ -504,6 +508,7 @@ const isBookingValid = useMemo(() => {
     updateDates(booking.dates.checkIn, date);
   }}
   onCancel={() => setOpenCheckOut(false)}
+   maximumDate={moment().add(maxBookingOffset, 'day').toDate()}
 />
 
 

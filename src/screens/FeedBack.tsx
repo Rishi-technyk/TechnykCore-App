@@ -275,7 +275,7 @@ const createStyles = (colors: any) =>
       fontFamily: FONT_FAMILY.normal,
     },
     btn: {
-      backgroundColor: colors.background,
+      backgroundColor: colors.secondary,
       padding: 15,
       borderRadius: 14,
       flexDirection: "row",
@@ -285,7 +285,7 @@ const createStyles = (colors: any) =>
       
     },
     btnText: {
-      color: colors.onPrimary,
+      color: colors.text,
       fontFamily: FONT_FAMILY.bold,
       fontSize: 16,
     },

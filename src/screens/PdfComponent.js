@@ -7,13 +7,15 @@ import {
 import Pdf from "react-native-pdf";
 import Header from "../components/Header";
 import { useAppTheme } from "../theme/AppThemeProvider";
+import { useSelector } from "react-redux";
 
 const PDFComponent = (props) => {
   const [loading, setLoading] = useState(true);
   const { colors } = useAppTheme();
+  const {token}=useSelector(state=>state.auth)
   const styles = createStyles(colors);
-
   const { route } = props;
+  console.log( route, '---------------------- token ---------------------');
   return (
     <View style={styles.container}>
       {loading && (
@@ -30,13 +32,16 @@ const PDFComponent = (props) => {
       <Header title={route?.params?.name?route.params.name:"Invoice"} />
 
       <Pdf
+      
         enablePaging={false}
         trustAllCerts={false}
-        source={{ uri: route.params.url }}
+        source={{ uri: route.params.url ,  headers: {
+      Authorization: `Bearer ${token}`,
+    },}}
         scale={1.0} // Force default scale
         minScale={1.0}
         maxScale={3.0}
-        fitPolicy={0} // 0 = fit width, 1 = fit height, 2 = fit both
+        fitPolicy={2} // 0 = fit width, 1 = fit height, 2 = fit both
         onLoadComplete={(numberOfPages, filePath) => {
           setLoading(false);
         }}
@@ -45,6 +50,7 @@ const PDFComponent = (props) => {
           console.log("PDF Error:", error);
           setLoading(false);
         }}
+        
         onPressLink={(uri) => {}}
         style={styles.pdf}
       />

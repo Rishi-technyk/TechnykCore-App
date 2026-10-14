@@ -120,7 +120,7 @@ const ClubMenu: React.FC<Props> = ({ navigation }) => {
       });
       return;
     }
-
+console.log( item.data, '---------------------- item.data, ---------------------');
     navigation.navigate(item.navigate as never, {
       url: item.data,
       name: item.name,
@@ -184,7 +184,7 @@ const ClubMenu: React.FC<Props> = ({ navigation }) => {
       ))}
     </View>
   );
-
+console.log( filteredMenus, '---------------------- filteredMenus ---------------------');
   return (
     <View style={styles.container}>
       <Header title="Club Menus" />
@@ -209,7 +209,7 @@ const ClubMenu: React.FC<Props> = ({ navigation }) => {
             <BookingHeroCard
               eyebrow="Dining"
               title="Club Menu Hub"
-              subtitle="Browse menus, jump into venue pages, and keep the food discovery flow cleaner and faster."
+              // subtitle="Browse menus, jump into venue pages, and keep the food discovery flow cleaner and faster."
               status={`${meta.total_menus || menus.length} menus`}
               statusTone="success"
             />

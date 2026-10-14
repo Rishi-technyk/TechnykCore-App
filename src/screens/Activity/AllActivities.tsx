@@ -32,7 +32,6 @@ import { RootState } from '../../store/store';
 const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 type Props = NativeStackScreenProps<AppStackParamList, 'AllActivities'>;
 
-// const imageBaseUrl = 'https://dynamixclubedepalma.co.in/clubdepalma';
 const imageBaseUrl = DOMAIN.IMG ;
 
 
@@ -59,17 +58,17 @@ const AllActivities: React.FC<Props> = ({ navigation }) => {
   });
 
   const facilities = useMemo(() => {
-    const source = facilitiesQuery?.data?.data || [];
-    return Array.isArray(source)
-      ? source.filter((item: any) => item?.status === 'Active')
-      : [];
+   
+    return facilitiesQuery?.data?.data || [];
   }, [facilitiesQuery?.data?.data]);
 
-  const featured = facilities.slice(0, Math.max(facilities.length, 1));
-  const availableCount = facilities.filter((item: any) => item?.is_available_slots).length;
+  const featured = facilitiesQuery?.data?.banners||[];
+  
+  console.log( facilities, '---------------------- item ---------------------');
+  const availableCount = facilities.filter((item: any) => item?.status == 1).length;
 
   const handleFacility = (item: any) => {
-    if (item?.is_available_slots) {
+    if (item?.status == 1) {
       (navigation as any).navigate('Activity', { facility: item });
       return;
     }
@@ -91,17 +90,6 @@ const AllActivities: React.FC<Props> = ({ navigation }) => {
     </View>
   );
 
-  const renderGridPlaceholder = () => (
-    <View style={styles.gridPlaceholderWrap}>
-      {[1, 2, 3, 4, 5, 6].map(item => (
-        <View key={item} style={styles.gridPlaceholderCard}>
-          <ShimmerPlaceholder width={72} height={72} shimmerStyle={styles.gridPlaceholderImage} />
-          <ShimmerPlaceholder width={90} height={16} shimmerStyle={styles.gridPlaceholderText} />
-          <ShimmerPlaceholder width={70} height={14} shimmerStyle={styles.gridPlaceholderText} />
-        </View>
-      ))}
-    </View>
-  );
 
   const renderFacility = ({ item }: { item: any }) => {
     return(
@@ -117,47 +105,24 @@ const AllActivities: React.FC<Props> = ({ navigation }) => {
     >
       <Image
         source={{
-          uri: `${imageBaseUrl}${item?.third_image || item?.first_image || ''}`,
+          uri: `${imageBaseUrl}${item?.icon || item?.first_image || ''}`,
         }}
         style={styles.facilityImage}
       />
       <Text style={[styles.facilityTitle, { color: colors.text }]} numberOfLines={2}>
-        {item?.name}
+        {item?.activity_name || item?.name || 'Activity'}
       </Text>
       <Text style={[styles.facilityMeta, { color: colors.textMuted }]} numberOfLines={2}>
-        {item?.short_description || 'Activity access and slot-based booking'}
+        {item?.description || 'Activity access and slot-based booking'}
       </Text>
-      <View
-        style={[
-          styles.facilityBadge,
-          {
-            backgroundColor: item?.is_available_slots ? `${colors.success}18` : `${colors.warning}18`,
-          },
-        ]}
-      >
-        <Text
-          style={[
-            styles.facilityBadgeText,
-            { color: item?.is_available_slots ? colors.success : colors.warning },
-          ]}
-        >
-          {item?.is_available_slots ? 'Open now' : 'Slots closed'}
-        </Text>
-      </View>
+  
     </Pressable>
   )};
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Header title="All Activities">
-        <Pressable
-          style={[styles.headerAction, { borderColor: `${colors.onPrimary}35` }]}
-          onPress={() => navigation.navigate('Players')}
-        >
-          <Text style={[styles.headerActionLabel, { color: colors.onPrimary }]}>
-            My Player
-          </Text>
-        </Pressable>
+      
       </Header>
 
       <FlatList
@@ -172,19 +137,19 @@ const AllActivities: React.FC<Props> = ({ navigation }) => {
             <BookingHeroCard
               eyebrow="Activity Discovery"
               title="Book sports and facility slots"
-              subtitle="Browse active facilities, check slot availability, and continue into the upgraded booking flow."
+              // subtitle="Browse active facilities, check slot availability, and continue into the upgraded booking flow."
               status={facilities.length ? 'Available' : 'No activities'}
               statusTone={facilities.length ? 'success' : 'warning'}
               meta={[
-                { label: 'Active', value: String(facilities.length) },
-                { label: 'Open now', value: String(availableCount), tone: 'success' },
-                { label: 'Players', value: 'Manage anytime' },
+                // { label: 'Active', value: String(facilities.length) },
+                // { label: 'Open now', value: String(availableCount), tone: 'success' },
+                // { label: 'Players', value: 'Manage anytime' },
               ]}
             />
 
             <DetailSection
               title="Featured Activities"
-              subtitle="Use the featured cards to jump directly into popular activities."
+              // subtitle="Use the featured cards to jump directly into popular activities."
               delay={40}
             >
               {facilitiesQuery.isLoading ? (
@@ -206,7 +171,7 @@ const AllActivities: React.FC<Props> = ({ navigation }) => {
                       >
                         <Image
                           source={{
-                            uri: `${imageBaseUrl}${item?.first_image || item?.third_image || ''}`,
+                            uri: `${imageBaseUrl}${item?.banner_image || item?.third_image || ''}`,
                           }}
                           style={styles.bannerImage}
                         />
@@ -215,11 +180,11 @@ const AllActivities: React.FC<Props> = ({ navigation }) => {
                           <View style={styles.bannerCopy}>
                             <Text style={styles.bannerTitle}>{item?.name}</Text>
                             <Text style={styles.bannerDescription} numberOfLines={2}>
-                              {item?.short_description || 'Tap to explore available slots.'}
+                              {item?.description || 'Tap to explore available slots.'}
                             </Text>
                           </View>
                           <View style={styles.bannerAction}>
-                            <Text style={styles.bannerActionText}>Book now</Text>
+                            <Text style={styles.bannerActionText}>{item.status}</Text>
                           </View>
                           </View>
                       </Pressable>
@@ -248,13 +213,13 @@ const AllActivities: React.FC<Props> = ({ navigation }) => {
               )}
             </DetailSection>
 
-            <DetailSection
+            {/* <DetailSection
               title="Activity Grid"
               subtitle="Select a facility to check dates, sessions, and live slot inventory."
               delay={70}
             >
               {facilitiesQuery.isLoading ? renderGridPlaceholder() : null}
-            </DetailSection>
+            </DetailSection> */}
           </View>
         }
         ListEmptyComponent={
@@ -292,16 +257,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headerAction: {
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
-  headerActionLabel: {
-    fontSize: 12,
-    fontFamily: FONT_FAMILY.semiBold,
-  },
+
   listContent: {
     paddingBottom: 24,
   },

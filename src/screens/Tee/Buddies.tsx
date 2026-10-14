@@ -128,16 +128,6 @@ const MyBuddies = ({
 
   return (
     <View style={styles.tabContainer}>
-      <BookingHeroCard
-        eyebrow="Buddy Directory"
-        title="Saved Tee Buddies"
-        subtitle="Keep your frequent playing partners ready for quick selection during tee booking."
-        status={`${buddySummary.total} saved`}
-        meta={[
-          { label: 'Buddies', value: String(buddySummary.total), tone: 'neutral' },
-          { label: 'Sessions', value: String(buddySummary.uniqueSessions), tone: 'neutral' },
-        ]}
-      />
 
       <FlatList
         data={buddyItems}
@@ -287,7 +277,7 @@ const MyBuddies = ({
         onPress={() => setPickerVisible(true)}
         visible
         animateFrom="right"
-        iconMode="static"
+        iconMode="dynamic"
         style={[
           styles.fabStyle,
           {
@@ -328,16 +318,7 @@ const Favorite4 = ({
 
   return (
     <View style={styles.tabContainer}>
-      <BookingHeroCard
-        eyebrow="Saved Groups"
-        title="Favorite Fours"
-        subtitle="Build ready-made player combinations to reserve tee slots in fewer taps."
-        status={`${groupSummary.total} groups`}
-        meta={[
-          { label: 'Groups', value: String(groupSummary.total), tone: 'neutral' },
-          { label: 'Players', value: String(groupSummary.totalPlayers), tone: 'neutral' },
-        ]}
-      />
+    
 
       <FlatList
         data={groupItems}

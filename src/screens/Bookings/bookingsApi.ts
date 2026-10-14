@@ -44,7 +44,7 @@ export const fetchBookingsByTab = async ({
       path: `${endpoint}?page=${page}`,
       Token: token,
     });
-
+console.log( res,'RES');
     if (!res?.status) {
       return { items: [], lastPage: 1 };
     }

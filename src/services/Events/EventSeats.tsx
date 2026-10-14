@@ -140,16 +140,16 @@ const EventSeats: React.FC<Props> = ({ route, navigation }) => {
   };
 
   const handleNavigation = () => {
-    if (selectedSeats.length !== totalTickets) {
-      showAlert({
-        title: 'Complete seat selection',
-        message: `Please select exactly ${totalTickets} seat${
-          totalTickets > 1 ? 's' : ''
-        } before continuing.`,
-        tone: 'warning',
-      });
-      return;
-    }
+    // if (selectedSeats.length !== totalTickets) {
+    //   showAlert({
+    //     title: 'Complete seat selection',
+    //     message: `Please select exactly ${totalTickets} seat${
+    //       totalTickets > 1 ? 's' : ''
+    //     } before continuing.`,
+    //     tone: 'warning',
+    //   });
+    //   return;
+    // }
 
     navigation.navigate('EventCheckOut', {
       event,

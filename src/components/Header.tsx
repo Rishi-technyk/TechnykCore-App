@@ -21,6 +21,7 @@ interface HeaderProps {
   isDawnload?: boolean;
   children?: ReactNode;
   toHome?: boolean;
+  type?: string;
 }
 
 type NavigationRoutes = {
@@ -36,6 +37,7 @@ const Header: React.FC<HeaderProps> = ({
   isDawnload = false,
   children,
   toHome = false,
+  type,
 }) => {
   const navigation = useNavigation<NavigationProp<NavigationRoutes>>();
   const [visible, setVisible] = useState<boolean>(false);
@@ -74,7 +76,7 @@ const Header: React.FC<HeaderProps> = ({
           <DownloadModal
             visible={visible}
             setVisible={setVisible}
-            data={title === "Invoice" ? "Credit" : "member"}
+            data={type === "Invoice" ? "Credit" : "member"}
           />
 
           {/* Filter Icon */}
@@ -115,6 +117,7 @@ const createStyles = (colors: { primary: string; onPrimary: string }) =>
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "flex-start",
+    maxWidth:'80%'
   },
   title: {
     color: colors.onPrimary,

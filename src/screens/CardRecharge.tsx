@@ -149,32 +149,32 @@ console.log( resolvedMode, '---------------------- resolvedMode ----------------
     }
   };
 
-  const handleAskAi = async prompt => {
-    try {
-      setAiLoading(true);
-      const response = await askFinancialAi({
-        contextType: 'recharge',
-        prompt,
-        filters,
-        token: userData?.token,
-      });
+  // const handleAskAi = async prompt => {
+  //   try {
+  //     setAiLoading(true);
+  //     const response = await askFinancialAi({
+  //       contextType: 'recharge',
+  //       prompt,
+  //       filters,
+  //       token: userData?.token,
+  //     });
 
-      setAiAnswer(response?.data?.answer || 'No recharge insight available yet.');
-      showAlert({
-        title: 'AI insight ready',
-        message: 'Your recharge summary and suggestions are ready to review.',
-        tone: 'success',
-      });
-    } catch (error) {
-      showAlert({
-        title: 'AI unavailable',
-        message: 'Unable to fetch AI insight right now.',
-        tone: 'danger',
-      });
-    } finally {
-      setAiLoading(false);
-    }
-  };
+  //     setAiAnswer(response?.data?.answer || 'No recharge insight available yet.');
+  //     showAlert({
+  //       title: 'AI insight ready',
+  //       message: 'Your recharge summary and suggestions are ready to review.',
+  //       tone: 'success',
+  //     });
+  //   } catch (error) {
+  //     showAlert({
+  //       title: 'AI unavailable',
+  //       message: 'Unable to fetch AI insight right now.',
+  //       tone: 'danger',
+  //     });
+  //   } finally {
+  //     setAiLoading(false);
+  //   }
+  // };
 
   const renderBreakdown = (items, emptyLabel) => {
     if (!items?.length) {
@@ -229,11 +229,13 @@ console.log( resolvedMode, '---------------------- resolvedMode ----------------
         title="Card"
         OpenDropDawn={() => setShowFilterModal(true)}
         isMulti={true}
+        isDawnload={true}
+        type="Recharge"
       >
-             <View style={styles.rightControls}>
+             {/* <View style={styles.rightControls}>
 
              <AIFilter onApply={handleAskAi} loading={aiLoading} title="Ask AI" />
-             </View>
+             </View> */}
 
       </Header>
 
@@ -306,7 +308,10 @@ console.log( resolvedMode, '---------------------- resolvedMode ----------------
         </View>
 
         <View style={styles.metricsRow}>
-          <View style={styles.metricCard}>
+            <View style={styles.metricCard}>
+                         <Text style={styles.metricLabel}>Payments may take a few minutes to reflect after a successful transaction.</Text>
+                      </View>
+          {/* <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Credits</Text>
             <Text style={styles.metricValue}>{currency(cards.credit_total)}</Text>
           </View>
@@ -317,10 +322,10 @@ console.log( resolvedMode, '---------------------- resolvedMode ----------------
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Transactions</Text>
             <Text style={styles.metricValue}>{cards.transaction_count || 0}</Text>
-          </View>
+          </View> */}
         </View>
 
-        <View style={styles.sectionCard}>
+        {/* <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Highlights</Text>
           <Text style={styles.infoLine}>
             Largest recharge: <Text style={styles.infoStrong}>{currency(highlights.largest_recharge)}</Text>
@@ -349,7 +354,7 @@ console.log( resolvedMode, '---------------------- resolvedMode ----------------
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Payment Mode Breakdown</Text>
           {renderBreakdown(analytics.payment_mode_breakdown, 'No payment mode data found.')}
-        </View>
+        </View> */}
 
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>Top Locations</Text>
@@ -842,7 +847,7 @@ const createStyles = colors =>
     },
     rightControls: {
       position: 'absolute',
-      right: 60,
+      right: 90,
       top: 12,
       flexDirection: 'row',
       alignItems: 'center',
